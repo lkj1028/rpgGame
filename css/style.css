@@ -22,6 +22,31 @@ body {background: #222; color: #fff; padding: 15px; font-size: 14px;}
 .hp-bar-fill {height: 100%; background: linear-gradient(90deg, #4ade80, #22c55e); transition: width 0.3s;}
 .hp-bar-fill.danger {background: linear-gradient(90deg, #f87171, #ef4444);}
 .hp-bar-fill.mid {background: linear-gradient(90deg, #facc15, #eab308);}
+.sprite-container {display: flex; justify-content: center; align-items: center; padding: 10px 0;}
+.sprite {font-size: 48px; display: flex; justify-content: center; align-items: center; width: 70px; height: 70px; border-radius: 50%; background: #333; margin: 0 auto;}
+.player-sprite {background: linear-gradient(135deg, #ff6d36 0%, #ff8f5a 100%); animation: float 3s ease-in-out infinite;}
+.monster-sprite {background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); animation: shake 2s ease-in-out infinite;}
+@keyframes float {0%, 100% {transform: translateY(0);} 50% {transform: translateY(-5px);}}
+@keyframes shake {0%, 100% {transform: translateX(0);} 25% {transform: translateX(-3px);} 75% {transform: translateX(3px);}}
+@keyframes attack-right {0% {transform: translateX(0);} 50% {transform: translateX(30px);} 100% {transform: translateX(0);}}
+@keyframes attack-left {0% {transform: translateX(0);} 50% {transform: translateX(-30px);} 100% {transform: translateX(0);}}
+@keyframes damage {0%, 100% {opacity: 1;} 50% {opacity: 0.3;}}
+@keyframes skill-burst {0% {transform: scale(1);filter: brightness(1);} 50% {transform: scale(1.3);filter: brightness(2) drop-shadow(0 0 10px #ff6d36);} 100% {transform: scale(1);filter: brightness(1);}}
+@keyframes shield-glow {0% {box-shadow: 0 0 0 rgba(59,130,246,0);} 50% {box-shadow: 0 0 20px rgba(59,130,246,0.8);} 100% {box-shadow: 0 0 0 rgba(59,130,246,0);}}
+@keyframes counter-attack {0% {transform: scale(1);} 25% {transform: scale(1.2);} 50% {transform: scale(0.9);} 75% {transform: scale(1.1);} 100% {transform: scale(1);}}
+@keyframes evade {0%, 100% {transform: translateX(0);} 50% {transform: translateX(-20px);opacity: 0.5;}}
+@keyframes death {0% {transform: scale(1);opacity: 1;} 50% {transform: scale(0.5);opacity: 0.5;} 100% {transform: scale(0);opacity: 0;}}
+@keyframes levelup {0% {transform: scale(1);} 50% {transform: scale(1.2);text-shadow: 0 0 20px #ffd700;} 100% {transform: scale(1);}}
+.sprite.attack-right {animation: attack-right 0.4s ease-in-out;}
+.sprite.attack-left {animation: attack-left 0.4s ease-in-out;}
+.sprite.skill-burst {animation: skill-burst 0.4s ease-out;}
+.sprite.shield-glow {animation: shield-glow 0.6s ease-out;}
+.sprite.counter-attack {animation: counter-attack 0.4s ease-out;}
+.sprite.evade {animation: evade 0.5s ease-out;}
+.monster-sprite.death {animation: death 0.6s ease-out forwards;}
+.player-sprite.levelup {animation: levelup 0.8s ease-out;}
+.sprite.damage {animation: damage 0.3s ease-in-out 2;}
+.sprite.hurt {filter: brightness(1.5) saturate(2);}
 .btn-group {margin: 12px 0; display: flex; flex-wrap: wrap; gap: 6px;}
 button {padding: 6px 12px; border: none; border-radius: 4px; background: #2563eb; color: #fff; cursor: pointer; font-size: 12px;}
 button:hover {background: #1d4ed8;}

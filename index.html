@@ -13,6 +13,8 @@
                 <span>💰 <b id="gold">0</b></span>
                 <span>⭐ <b id="exp">0</b>/<b id="needExp">100</b></span>
                 <span>🏷️ Lv.<b id="lv">1</b></span>
+                <span id="skillPointsDisplay" style="display:none;">🌟 技能点: <b id="skillPoints">0</b></span>
+                <span id="petDisplay" style="display:none;">🐾 <b id="petName"></b></span>
                 <span class="mini-stat">击杀: <span id="killCount">0</span></span>
                 <span class="mini-stat">事件: <span id="eventCount">0</span></span>
             </div>
@@ -33,12 +35,17 @@
         <div class="panel">
             <div class="role">
                 <h3>🧙 主角</h3>
+                <div class="sprite-container">
+                    <div class="sprite player-sprite" id="playerSprite">👸</div>
+                </div>
+                <div class="title-display" id="titleDisplay" style="text-align:center;color:#fbbf24;font-size:11px;margin-bottom:5px;display:none;"></div>
                 <div class="stat-row"><span class="label">血量</span><span class="value hp" id="hp">100/100</span></div>
                 <div class="hp-bar"><div class="hp-bar-fill" id="hpBar" style="width:100%"></div></div>
                 <div class="stat-row"><span class="label">攻击</span><span class="value atk" id="atk">15</span> <span class="label" id="atkBonus" style="color:#4ade80"></span></div>
                 <div class="stat-row"><span class="label">防御</span><span class="value def" id="def">5</span> <span class="label" id="defBonus" style="color:#4ade80"></span></div>
                 <div class="stat-row"><span class="label">暴击率</span><span class="value" id="crit">5</span>%</div>
                 <div class="stat-row"><span class="label">闪避率</span><span class="value" id="dodge">5</span>%</div>
+                <div class="stat-row"><span class="label">速度</span><span class="value" id="speed">10</span></div>
                 <div class="buff-debuff-bar" id="playerBuffs"></div>
                 <div class="section-title">装备栏</div>
                 <div class="equipment-slot" id="weaponSlot"><span class="slot-name">⚔️ 武器</span><span class="item-name">无</span></div>
@@ -48,12 +55,16 @@
 
             <div class="monster">
                 <h3>👹 野生怪物</h3>
+                <div class="sprite-container">
+                    <div class="sprite monster-sprite" id="monsterSprite">👹</div>
+                </div>
                 <div class="stat-row"><span class="label">名称</span><span class="value" id="mName">---</span></div>
                 <div class="stat-row"><span class="label">等级</span><span class="value" id="mLv">---</span></div>
                 <div class="stat-row"><span class="label">血量</span><span class="value hp" id="mHp">0/0</span></div>
                 <div class="hp-bar"><div class="hp-bar-fill" id="mHpBar" style="width:0%"></div></div>
                 <div class="stat-row"><span class="label">攻击</span><span class="value atk" id="mAtk">0</span></div>
                 <div class="stat-row"><span class="label">防御</span><span class="value def" id="mDef">0</span></div>
+                <div class="stat-row"><span class="label">速度</span><span class="value" id="mSpeed">0</span></div>
                 <div class="buff-debuff-bar" id="monsterBuffs"></div>
             </div>
 
@@ -70,17 +81,22 @@
             <button onclick="useSkill(0)" id="skill0Btn" class="skill-btn">💥 重击</button>
             <button onclick="useSkill(1)" id="skill1Btn" class="skill-btn">🛡️ 铁壁</button>
             <button onclick="useSkill(2)" id="skill2Btn" class="skill-btn">⚔️ 连击</button>
+            <button onclick="summonPet()" id="summonPetBtn" style="background:#9333ea;">🐾 召唤伙伴</button>
             <button onclick="heal()">❤️ 回血</button>
             <button onclick="run()">🏃 逃跑</button>
             <button onclick="newMonster()">🔍 寻找怪物</button>
             <button onclick="openShop()">🏪 商店</button>
             <button onclick="openEquipShop()">🛒 装备</button>
+            <button onclick="openEquipmentEnhance()">🔨 强化</button>
             <button onclick="triggerRandomEvent()" class="event-btn" id="eventBtn">🎲 随机事件</button>
             <button onclick="openLeaderboard()">📊 排行</button>
             <button onclick="openSaveLoad()">💾 存档</button>
             <button onclick="openSettings()">⚙️ 设置</button>
             <button onclick="openInventory()">🎒 背包</button>
             <button onclick="openMonsterBook()">📖 图鉴</button>
+            <button onclick="openSkillTree()">🌳 技能树</button>
+            <button onclick="openPetManagement()">🐾 伙伴</button>
+            <button onclick="openPetGacha()">🎰 宠物奖券</button>
         </div>
 
         <div class="log" id="log">游戏开始！点击【寻找怪物】开启冒险</div>
