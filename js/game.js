@@ -117,6 +117,8 @@ function updateQuests() {
             q.progress = player.bossDefeated;
         } else if (q.zone === -1) {
             q.progress = consecutiveKills;
+        } else if (q.zone === -2) {
+            q.progress = player.killCount;
         } else if (q.zone !== undefined) {
             q.progress = zoneKills[q.zone] || 0;
         }
