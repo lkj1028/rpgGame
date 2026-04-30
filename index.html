@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>网页回合RPG</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="box">
+        <div class="top-bar">
+            <h2>⚔️ 网页回合RPG</h2>
+            <div class="gold-exp-bar">
+                <span>💰 <b id="gold">0</b></span>
+                <span>⭐ <b id="exp">0</b>/<b id="needExp">100</b></span>
+                <span>🏷️ Lv.<b id="lv">1</b></span>
+                <span class="mini-stat">击杀: <span id="killCount">0</span></span>
+                <span class="mini-stat">事件: <span id="eventCount">0</span></span>
+            </div>
+        </div>
+
+        <div class="zone-bar">
+            <span style="font-size:12px;color:#aaa;">地图:</span>
+            <button class="zone-btn active" onclick="switchZone(0)" id="zoneBtn0">🌳 森林</button>
+            <button class="zone-btn" onclick="switchZone(1)" id="zoneBtn1">🕳️ 洞穴</button>
+            <button class="zone-btn" onclick="switchZone(2)" id="zoneBtn2">👹 BOSS领域</button>
+        </div>
+
+        <div class="panel">
+            <div class="role">
+                <h3>🧙 主角</h3>
+                <div class="stat-row"><span class="label">血量</span><span class="value hp" id="hp">100/100</span></div>
+                <div class="hp-bar"><div class="hp-bar-fill" id="hpBar" style="width:100%"></div></div>
+                <div class="stat-row"><span class="label">攻击</span><span class="value atk" id="atk">15</span> <span class="label" id="atkBonus" style="color:#4ade80"></span></div>
+                <div class="stat-row"><span class="label">防御</span><span class="value def" id="def">5</span> <span class="label" id="defBonus" style="color:#4ade80"></span></div>
+                <div class="stat-row"><span class="label">暴击率</span><span class="value" id="crit">5</span>%</div>
+                <div class="stat-row"><span class="label">闪避率</span><span class="value" id="dodge">5</span>%</div>
+                <div class="buff-debuff-bar" id="playerBuffs"></div>
+                <div class="section-title">装备栏</div>
+                <div class="equipment-slot" id="weaponSlot"><span class="slot-name">⚔️ 武器</span><span class="item-name">无</span></div>
+                <div class="equipment-slot" id="armorSlot"><span class="slot-name">🛡️ 防具</span><span class="item-name">无</span></div>
+                <div class="equipment-slot" id="accessorySlot"><span class="slot-name">💍 饰品</span><span class="item-name">无</span></div>
+            </div>
+
+            <div class="monster">
+                <h3>👹 野生怪物</h3>
+                <div class="stat-row"><span class="label">名称</span><span class="value" id="mName">---</span></div>
+                <div class="stat-row"><span class="label">等级</span><span class="value" id="mLv">---</span></div>
+                <div class="stat-row"><span class="label">血量</span><span class="value hp" id="mHp">0/0</span></div>
+                <div class="hp-bar"><div class="hp-bar-fill" id="mHpBar" style="width:0%"></div></div>
+                <div class="stat-row"><span class="label">攻击</span><span class="value atk" id="mAtk">0</span></div>
+                <div class="stat-row"><span class="label">防御</span><span class="value def" id="mDef">0</span></div>
+                <div class="buff-debuff-bar" id="monsterBuffs"></div>
+            </div>
+
+            <div class="quest-panel">
+                <h3>📜 任务</h3>
+                <div class="quest-list" id="questList"></div>
+                <div class="section-title" style="margin-top:10px;">🏆 成就</div>
+                <div class="achievement-bar" id="achieveBar"></div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button onclick="attack()">🗡️ 攻击</button>
+            <button onclick="useSkill(0)" id="skill0Btn" class="skill-btn">💥 重击</button>
+            <button onclick="useSkill(1)" id="skill1Btn" class="skill-btn">🛡️ 铁壁</button>
+            <button onclick="useSkill(2)" id="skill2Btn" class="skill-btn">⚔️ 连击</button>
+            <button onclick="heal()">❤️ 回血</button>
+            <button onclick="run()">🏃 逃跑</button>
+            <button onclick="newMonster()">🔍 寻找怪物</button>
+            <button onclick="openShop()">🏪 商店</button>
+            <button onclick="openEquipShop()">🛒 装备</button>
+            <button onclick="triggerRandomEvent()" class="event-btn" id="eventBtn">🎲 随机事件</button>
+            <button onclick="openLeaderboard()">📊 排行</button>
+            <button onclick="openSaveLoad()">💾 存档</button>
+            <button onclick="openSettings()">⚙️ 设置</button>
+            <button onclick="openInventory()">🎒 背包</button>
+            <button onclick="openMonsterBook()">📖 图鉴</button>
+        </div>
+
+        <div class="log" id="log">游戏开始！点击【寻找怪物】开启冒险</div>
+
+        <div class="bottom-panels">
+            <div class="event-panel">
+                <h4>🎭 当前事件</h4>
+                <div id="currentEvent" style="font-size:12px;color:#aaa;">无</div>
+                <div class="event-btns" id="eventBtns" style="margin-top:8px;display:none;">
+                    <button onclick="confirmEvent()" id="eventConfirmBtn">确认</button>
+                    <button onclick="cancelEvent()">取消</button>
+                </div>
+            </div>
+            <div class="achieve-panel">
+                <h4>🎯 已解锁成就</h4>
+                <div id="unlockedAchieves" style="font-size:11px;color:#aaa;">暂无成就</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal" id="modalContent"></div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
