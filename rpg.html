@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>网页回合RPG</title>
+    <title>修仙问道</title>
     
 <style>
 * {margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑";}
@@ -131,7 +131,7 @@ button.event-btn:hover {background: #047857;}
     .log {height: 150px; font-size: 17px;}
 }
 .achieve-item:hover {opacity: 0.8;}
-.modal-overlay {position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; display: none;}
+.modal-overlay {position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000;}
 .modal {background: #333; padding: 20px; border-radius: 8px; min-width: 300px; max-width: 500px;}
 .modal h3 {color: #ff6d36; margin-bottom: 12px;}
 .modal p {margin: 8px 0; font-size: 13px;}
@@ -177,28 +177,29 @@ button.event-btn:hover {background: #047857;}
 <body>
     <div class="box">
         <div class="top-bar">
-            <h2>⚔️ 网页回合RPG</h2>
+            <h2>⚔️ 修仙问道</h2>
             <div class="gold-exp-bar">
-                <span>💰 <b id="gold">0</b></span>
-                <span>⭐ <b id="exp">0</b>/<b id="needExp">100</b></span>
-                <span>🏷️ Lv.<b id="lv">1</b></span>
-                <span id="skillPointsDisplay" style="display:none;">🌟 技能点: <b id="skillPoints">0</b></span>
+                <span>💎 <b id="spiritStones">0</b></span>
+                <span>☯️ <b id="qi">0</b>/<b id="needQi">100</b></span>
+                <span id="realmDisplay">🏷️ <b id="realm">炼气期·一层</b></span>
+                <span id="skillPointsDisplay" style="display:none;">🌟 悟道点: <b id="skillPoints">0</b></span>
                 <span id="petDisplay" style="display:none;">🐾 <b id="petName"></b></span>
-                <span class="mini-stat">击杀: <span id="killCount">0</span></span>
-                <span class="mini-stat">事件: <span id="eventCount">0</span></span>
+                <span id="sectDisplay" style="display:none;">🏛️ <b id="sectName"></b> <span style="font-size:10px;color:#fbbf24;" id="sectRank"></span></span>
+                <span class="mini-stat">斩妖: <span id="killCount">0</span></span>
+                <span class="mini-stat">奇遇: <span id="eventCount">0</span></span>
             </div>
         </div>
 
         <div class="zone-bar">
             <span style="font-size:12px;color:#aaa;">地图:</span>
-            <button class="zone-btn active" onclick="switchZone(0)" id="zoneBtn0">🌳 森林</button>
-            <button class="zone-btn" onclick="switchZone(1)" id="zoneBtn1">🌿 草原</button>
-            <button class="zone-btn" onclick="switchZone(2)" id="zoneBtn2">🕳️ 洞穴</button>
-            <button class="zone-btn" onclick="switchZone(3)" id="zoneBtn3">🌋 火山</button>
-            <button class="zone-btn" onclick="switchZone(4)" id="zoneBtn4">❄️ 冰原</button>
-            <button class="zone-btn" onclick="switchZone(5)" id="zoneBtn5">🏰 暗夜城堡</button>
-            <button class="zone-btn" onclick="switchZone(6)" id="zoneBtn6">☁️ 天空之城</button>
-            <button class="zone-btn" onclick="switchZone(7)" id="zoneBtn7">👹 BOSS领域</button>
+            <button class="zone-btn active" onclick="switchZone(0)" id="zoneBtn0">🌳 青云山脉</button>
+            <button class="zone-btn" onclick="switchZone(1)" id="zoneBtn1">🌿 万兽谷</button>
+            <button class="zone-btn" onclick="switchZone(2)" id="zoneBtn2">🕳️ 幽冥洞窟</button>
+            <button class="zone-btn" onclick="switchZone(3)" id="zoneBtn3">🌋 赤焰火山</button>
+            <button class="zone-btn" onclick="switchZone(4)" id="zoneBtn4">❄️ 极寒冰原</button>
+            <button class="zone-btn" onclick="switchZone(5)" id="zoneBtn5">🏰 魔域</button>
+            <button class="zone-btn" onclick="switchZone(6)" id="zoneBtn6">☁️ 仙界遗迹</button>
+            <button class="zone-btn" onclick="switchZone(7)" id="zoneBtn7">👹 天劫之地</button>
         </div>
 
         <div class="panel">
@@ -208,7 +209,7 @@ button.event-btn:hover {background: #047857;}
                     <div class="sprite player-sprite" id="playerSprite">👸</div>
                 </div>
                 <div class="title-display" id="titleDisplay" style="text-align:center;color:#fbbf24;font-size:11px;margin-bottom:5px;display:none;"></div>
-                <div class="stat-row"><span class="label">血量</span><span class="value hp" id="hp">100/100</span></div>
+                <div class="stat-row"><span class="label">生机</span><span class="value hp" id="hp">100/100</span></div>
                 <div class="hp-bar"><div class="hp-bar-fill" id="hpBar" style="width:100%"></div></div>
                 <div class="stat-row"><span class="label">攻击</span><span class="value atk" id="atk">15</span> <span class="label" id="atkBonus" style="color:#4ade80"></span></div>
                 <div class="stat-row"><span class="label">防御</span><span class="value def" id="def">5</span> <span class="label" id="defBonus" style="color:#4ade80"></span></div>
@@ -219,17 +220,17 @@ button.event-btn:hover {background: #047857;}
                 <div class="section-title">装备栏</div>
                 <div class="equipment-slot" id="weaponSlot"><span class="slot-name">⚔️ 武器</span><span class="item-name">无</span></div>
                 <div class="equipment-slot" id="armorSlot"><span class="slot-name">🛡️ 防具</span><span class="item-name">无</span></div>
-                <div class="equipment-slot" id="accessorySlot"><span class="slot-name">💍 饰品</span><span class="item-name">无</span></div>
+                <div class="equipment-slot" id="accessorySlot"><span class="slot-name">💍 灵饰</span><span class="item-name">无</span></div>
             </div>
 
             <div class="monster">
-                <h3>👹 野生怪物</h3>
+                <h3>👹 野生妖兽</h3>
                 <div class="sprite-container">
                     <div class="sprite monster-sprite" id="monsterSprite">👹</div>
                 </div>
                 <div class="stat-row"><span class="label">名称</span><span class="value" id="mName">---</span></div>
-                <div class="stat-row"><span class="label">等级</span><span class="value" id="mLv">---</span></div>
-                <div class="stat-row"><span class="label">血量</span><span class="value hp" id="mHp">0/0</span></div>
+                <div class="stat-row"><span class="label">境界</span><span class="value" id="mLv">---</span></div>
+                <div class="stat-row"><span class="label">生机</span><span class="value hp" id="mHp">0/0</span></div>
                 <div class="hp-bar"><div class="hp-bar-fill" id="mHpBar" style="width:0%"></div></div>
                 <div class="stat-row"><span class="label">攻击</span><span class="value atk" id="mAtk">0</span></div>
                 <div class="stat-row"><span class="label">防御</span><span class="value def" id="mDef">0</span></div>
@@ -246,33 +247,42 @@ button.event-btn:hover {background: #047857;}
         </div>
 
         <div class="btn-group">
-            <button onclick="attack()">🗡️ 攻击</button>
-            <button onclick="useSkill(0)" id="skill0Btn" class="skill-btn">💥 重击</button>
-            <button onclick="useSkill(1)" id="skill1Btn" class="skill-btn">🛡️ 铁壁</button>
-            <button onclick="useSkill(2)" id="skill2Btn" class="skill-btn">⚔️ 连击</button>
-            <button onclick="summonPet()" id="summonPetBtn" style="background:#9333ea;">🐾 召唤伙伴</button>
-            <button onclick="heal()">❤️ 回血</button>
-            <button onclick="run()">🏃 逃跑</button>
-            <button onclick="newMonster()">🔍 寻找怪物</button>
-            <button onclick="openShop()">🏪 商店</button>
-            <button onclick="openEquipShop()">🛒 装备</button>
-            <button onclick="openEquipmentEnhance()">🔨 强化</button>
-            <button onclick="triggerRandomEvent()" class="event-btn" id="eventBtn">🎲 随机事件</button>
-            <button onclick="openLeaderboard()">📊 排行</button>
+            <button onclick="attack()">🗡️ 御剑术</button>
+            <button onclick="useSkill(0)" id="skill0Btn" class="skill-btn">🔥 火球术</button>
+            <button onclick="useSkill(1)" id="skill1Btn" class="skill-btn">🛡️ 金刚罩</button>
+            <button onclick="useSkill(2)" id="skill2Btn" class="skill-btn">⚔️ 御剑诀</button>
+            <button onclick="summonPet()" id="summonPetBtn" style="background:#9333ea;">🐾 召唤灵宠</button>
+            <button onclick="heal()">💊 服用丹药</button>
+            <button onclick="run()">🏃 遁走</button>
+            <button onclick="newMonster()">🔍 寻找妖兽</button>
+            <button onclick="tryBottleneckBreakthrough()" id="breakthroughBtn" style="background:#f59e0b; display: none;">🌀 突破瓶颈</button>
+            <button onclick="toggleMeditation()" id="meditationBtn" style="background:#3b82f6;">🧘 打坐修炼</button>
+            <button onclick="openStory()" id="storyBtn" style="background:#8b5cf6; display:none;">📜 剧情</button>
+            <button onclick="openDungeon()" id="dungeonBtn" style="background:#7c3aed; display:none;">🏰 副本</button>
+            <button onclick="openSpiritRoot()" id="spiritRootBtn" style="background:#ec4899; display:none;">🧬 灵根</button>
+            <button onclick="openShop()">🏪 坊市</button>
+            <button onclick="openEquipShop()">🛒 法宝阁</button>
+            <button onclick="openEquipmentEnhance()" id="equipmentBtn" style="display:none;">🔨 炼器</button>
+            <button onclick="openAlchemy()" id="alchemyBtn" style="display:none;">⚗️ 炼丹</button>
+            <button onclick="triggerRandomEvent()" class="event-btn" id="eventBtn">🎲 奇遇</button>
+            <button onclick="openLeaderboard()">📊 天榜</button>
             <button onclick="openSaveLoad()">💾 存档</button>
             <button onclick="openSettings()">⚙️ 设置</button>
-            <button onclick="openInventory()">🎒 背包</button>
-            <button onclick="openMonsterBook()">📖 图鉴</button>
-            <button onclick="openSkillTree()">🌳 技能树</button>
-            <button onclick="openPetManagement()">🐾 伙伴</button>
-            <button onclick="openPetGacha()">🎰 宠物奖券</button>
+            <button onclick="openInventory()">🎒 储物袋</button>
+            <button onclick="openMonsterBook()">📖 妖兽图鉴</button>
+            <button onclick="openSkillTree()">🌳 功法</button>
+            <button onclick="openPetManagement()" id="petBtn" style="display:none;">🐾 灵宠</button>
+            <button onclick="openPetGacha()" id="petGachaBtn" style="display:none;">🎰 灵宠召唤</button>
+            <button onclick="openSect()" id="sectBtn" style="display:none;">🏛️ 宗门</button>
+            <button onclick="openResidence()" id="residenceBtn" style="display:none;">🏠 洞府</button>
+            <button onclick="openSocial()" id="socialBtn" style="display:none;">🤝 仙缘</button>
         </div>
 
-        <div class="log" id="log">游戏开始！点击【寻找怪物】开启冒险</div>
+        <div class="log" id="log">修仙之路开启！点击【寻找妖兽】开始历练</div>
 
         <div class="bottom-panels">
             <div class="event-panel">
-                <h4>🎭 当前事件</h4>
+                <h4>🎭 当前奇遇</h4>
                 <div id="currentEvent" style="font-size:12px;color:#aaa;">无</div>
                 <div class="event-btns" id="eventBtns" style="margin-top:8px;display:none;">
                     <button onclick="confirmEvent()" id="eventConfirmBtn">确认</button>
@@ -294,97 +304,333 @@ button.event-btn:hover {background: #047857;}
     
 <script>
 const player = {
-    lv: 1, hp: 100, maxHp: 100, atk: 15, def: 5, speed: 10,
-    exp: 0, needExp: 100, gold: 50,
-    crit: 5, dodge: 5,
+    realm: 0, realmName: "炼气期", stage: 1,
+    hp: 120, maxHp: 120, atk: 18, def: 6, speed: 10,
+    qi: 0, needQi: 100, spiritStones: 100,
+    crit: 8, dodge: 5,
+    spiritRoot: "five", spiritRootQuality: 0, spiritRootAwakening: 0, rerollCount: 0,
     equipment: { weapon: null, armor: null, accessory: null },
     buffs: [],
     skills: [
-        { name: "重击", desc: "1.5倍伤害", cd: 0, maxCd: 2, isReady: true },
-        { name: "铁壁", desc: "防御+10", cd: 0, maxCd: 3, isReady: true },
-        { name: "连击", desc: "连攻2次", cd: 0, maxCd: 4, isReady: true }
+        { name: "火球术", desc: "造成1.5倍伤害", cd: 0, maxCd: 2, isReady: true },
+        { name: "金刚罩", desc: "防御+10", cd: 0, maxCd: 3, isReady: true },
+        { name: "御剑诀", desc: "连攻2次", cd: 0, maxCd: 4, isReady: true }
     ],
     currentZone: 0,
     killCount: 0,
     eventCount: 0,
     bossDefeated: 0,
-    pet: { id: "slime", name: "史莱姆", sprite: "🟢", atk: 3, hp: 40, def: 3, speed: 5, rarity: "common" },
+    pet: { id: "spiritFox", name: "灵狐", sprite: "🦊", atk: 3, hp: 40, def: 3, speed: 5, rarity: "common" },
     skillPoints: 0,
     equipmentEnhanceLevels: { weapon: 0, armor: 0, accessory: 0 },
-    learnedSkills: ["重击", "铁壁", "连击"],
-    titles: []
+    learnedSkills: ["火球术", "金刚罩", "御剑诀"],
+    titles: [],
+    alchemy: { level: 1, exp: 0 },
+    forging: { level: 1, exp: 0 },
+    meditation: { active: false, startTime: null, totalGain: 0 },
+    sect: { id: null, name: null, contribution: 0, rank: "外门弟子", dailyQuestsCompleted: 0, lastDailyReset: 0 },
+    residence: { level: 1, spiritField: 0, alchemyRoom: 0, forgeRoom: 0, spiritPool: 0, lastCollect: Date.now() },
+    master: { id: null, name: null, realm: 0, stage: 1, intimacy: 0 },
+    disciples: [],
+    partner: { id: null, name: null, realm: 0, stage: 1, intimacy: 0, married: false },
+    breakthrough: { inProgress: false, type: null, progress: 0, required: 0, nextStage: 0, nextRealmIndex: 0 }
+};
+
+const spiritRoots = [
+    { id: "metal", name: "金灵根", icon: "⚔️", color: "#fbbf24",
+      atkBonus: 0.2, defBonus: 0.05, hpBonus: 0.05, qiBonus: 0.1,
+      description: "金属性灵根，攻击加成最高", skillName: "金戈铁马" },
+    { id: "wood", name: "木灵根", icon: "🌿", color: "#22c55e",
+      atkBonus: 0.1, defBonus: 0.1, hpBonus: 0.15, qiBonus: 0.15,
+      description: "木属性灵根，生机和防御均衡", skillName: "枯木逢春" },
+    { id: "water", name: "水灵根", icon: "💧", color: "#3b82f6",
+      atkBonus: 0.1, defBonus: 0.15, hpBonus: 0.1, qiBonus: 0.2,
+      description: "水属性灵根，修炼效率最高", skillName: "水月镜花" },
+    { id: "fire", name: "火灵根", icon: "🔥", color: "#ef4444",
+      atkBonus: 0.25, defBonus: 0, hpBonus: 0.05, qiBonus: 0.1,
+      description: "火属性灵根，攻击极端强化", skillName: "烈焰焚天" },
+    { id: "earth", name: "土灵根", icon: "🪨", color: "#a78bfa",
+      atkBonus: 0.05, defBonus: 0.25, hpBonus: 0.2, qiBonus: 0.05,
+      description: "土属性灵根，防御和生机最强", skillName: "不动如山" },
+    { id: "five", name: "五灵根", icon: "🧧", color: "#94a3b8",
+      atkBonus: 0.1, defBonus: 0.1, hpBonus: 0.1, qiBonus: 0.1,
+      description: "五行均衡，适合新手", skillName: "五行轮转" }
+];
+
+const spiritRootQualities = [
+    { name: "凡品", color: "#9ca3af", multiplier: 1, chance: 0.5 },
+    { name: "精品", color: "#22c55e", multiplier: 1.3, chance: 0.3 },
+    { name: "珍品", color: "#3b82f6", multiplier: 1.6, chance: 0.15 },
+    { name: "仙品", color: "#f59e0b", multiplier: 2.0, chance: 0.04 },
+    { name: "神品", color: "#ef4444", multiplier: 3.0, chance: 0.01 }
+];
+
+const spiritRootAwakenings = [
+    { level: 1, name: "灵根初现", atkBonus: 5, defBonus: 2, hpBonus: 10, qiBonus: 0.05, cost: 500 },
+    { level: 2, name: "灵根小成", atkBonus: 10, defBonus: 5, hpBonus: 25, qiBonus: 0.1, cost: 1500 },
+    { level: 3, name: "灵根大成", atkBonus: 20, defBonus: 10, hpBonus: 50, qiBonus: 0.15, cost: 5000 },
+    { level: 4, name: "灵根圆满", atkBonus: 35, defBonus: 18, hpBonus: 100, qiBonus: 0.25, cost: 15000 },
+    { level: 5, name: "灵根觉醒", atkBonus: 60, defBonus: 30, hpBonus: 200, qiBonus: 0.4, cost: 50000 }
+];
+
+function getSpiritRootBonus() {
+    var root = spiritRoots.find(function(r) { return r.id === player.spiritRoot; }) || spiritRoots[5];
+    var quality = spiritRootQualities[player.spiritRootQuality] || spiritRootQualities[0];
+    var awakening = spiritRootAwakenings[player.spiritRootAwakening] || spiritRootAwakenings[0];
+
+    var baseBonus = {
+        atk: 1 + root.atkBonus * quality.multiplier,
+        def: 1 + root.defBonus * quality.multiplier,
+        hp: 1 + root.hpBonus * quality.multiplier,
+        qi: 1 + root.qiBonus * quality.multiplier
+    };
+
+    return {
+        atkBonus: Math.floor(player.atk * (baseBonus.atk - 1) + awakening.atkBonus),
+        defBonus: Math.floor(player.def * (baseBonus.def - 1) + awakening.defBonus),
+        hpBonus: Math.floor(player.maxHp * (baseBonus.hp - 1) + awakening.hpBonus),
+        qiBonus: awakening.qiBonus
+    };
+}
+
+function rerollSpiritRoot() {
+    var cost = 1000 * Math.pow(2, player.rerollCount || 0);
+    if (player.spiritStones < cost) {
+        return addLog("需要 " + cost + " 灵石才能重塑灵根！");
+    }
+    player.spiritStones -= cost;
+    player.rerollCount = (player.rerollCount || 0) + 1;
+
+    var rand = Math.random();
+    var cumChance = 0;
+    var qualityIndex = 0;
+    for (var i = 0; i < spiritRootQualities.length; i++) {
+        cumChance += spiritRootQualities[i].chance;
+        if (rand < cumChance) {
+            qualityIndex = i;
+            break;
+        }
+    }
+
+    var rootIndex = Math.floor(Math.random() * (spiritRoots.length - 1));
+    player.spiritRoot = spiritRoots[rootIndex].id;
+    player.spiritRootQuality = qualityIndex;
+    player.spiritRootAwakening = 0;
+
+    addLog("🎲 重塑灵根成功！获得【" + spiritRootQualities[qualityIndex].name + spiritRoots[rootIndex].name + "】！", 'event');
+    updateUI();
+}
+
+function awakenSpiritRoot() {
+    var currentAwakening = player.spiritRootAwakening || 0;
+    if (currentAwakening >= spiritRootAwakenings.length - 1) {
+        return addLog("灵根已经觉醒到最高层次！");
+    }
+
+    var nextAwakening = spiritRootAwakenings[currentAwakening + 1];
+    if (player.spiritStones < nextAwakening.cost) {
+        return addLog("需要 " + nextAwakening.cost + " 灵石才能觉醒！");
+    }
+
+    player.spiritStones -= nextAwakening.cost;
+    player.spiritRootAwakening = currentAwakening + 1;
+
+    addLog("✨ 灵根觉醒成功！进入【" + nextAwakening.name + "】层次！", 'buff');
+    updateUI();
+}
+
+const realms = [
+    { name: "炼气期", stages: 9, color: "#94a3b8", multiplier: 1, needTribulation: false },
+    { name: "筑基期", stages: 9, color: "#60a5fa", multiplier: 1.8, needTribulation: true, tribulationName: "筑基天劫" },
+    { name: "金丹期", stages: 9, color: "#fbbf24", multiplier: 2.8, needTribulation: true, tribulationName: "金丹雷劫" },
+    { name: "元婴期", stages: 9, color: "#a78bfa", multiplier: 4.0, needTribulation: true, tribulationName: "元婴心劫" },
+    { name: "化神期", stages: 9, color: "#f472b6", multiplier: 5.5, needTribulation: true, tribulationName: "化神天劫" },
+    { name: "炼虚期", stages: 9, color: "#22d3ee", multiplier: 7.5, needTribulation: true, tribulationName: "炼虚雷劫" },
+    { name: "合体期", stages: 9, color: "#fb923c", multiplier: 10, needTribulation: true, tribulationName: "合体心劫" },
+    { name: "大乘期", stages: 9, color: "#ef4444", multiplier: 14, needTribulation: true, tribulationName: "大乘天劫" },
+    { name: "渡劫期", stages: 9, color: "#dc2626", multiplier: 20, needTribulation: true, tribulationName: "飞升仙劫" }
+];
+
+const bottleneckStages = [3, 6, 9];
+
+function isBottleneckStage(stage) {
+    return bottleneckStages.indexOf(stage) >= 0;
+}
+
+function getBreakthroughSuccessRate(realm, stage, isRealmBreakthrough) {
+    var baseRate = isRealmBreakthrough ? 60 : 80;
+    var realmPenalty = realm * 3;
+    var stageBonus = isRealmBreakthrough ? 0 : (stage === 9 ? -10 : 0);
+    return Math.max(20, Math.min(95, baseRate - realmPenalty + stageBonus));
+}
+
+function getTribulationDifficulty(realm) {
+    return {
+        hp: 200 + realm * 100,
+        atk: 30 + realm * 15,
+        def: 10 + realm * 5,
+        speed: 15 + realm * 3,
+        exp: 100 + realm * 50,
+        gold: 50 + realm * 30
+    };
+}
+
+const sects = [
+    { id: "qingyun", name: "青云宗", type: "正道", description: "名门正派，功法均衡", color: "#22c55e", minRealm: 0,
+      benefits: { expBonus: 0.1, hpBonus: 0.05 }, skills: ["青云剑诀", "御风术"] },
+    { id: "tianmo", name: "天魔教", type: "魔道", description: "魔道巨擘，攻击凌厉", color: "#dc2626", minRealm: 0,
+      benefits: { atkBonus: 0.15, critBonus: 3 }, skills: ["天魔功", "嗜血术"] },
+    { id: "yaoyao", name: "瑶池圣地", type: "正道", description: "女修圣地，擅长辅助", color: "#f472b6", minRealm: 1,
+      benefits: { hpBonus: 0.15, defBonus: 0.1 }, skills: ["瑶池仙法", "回春术"] },
+    { id: "jianzong", name: "万剑宗", type: "正道", description: "剑修宗门，攻击力极强", color: "#3b82f6", minRealm: 2,
+      benefits: { atkBonus: 0.2, speedBonus: 5 }, skills: ["万剑归宗", "剑气护体"] },
+    { id: "hunyuan", name: "混元宗", type: "中立", description: "丹道大宗，炼丹加成", color: "#f59e0b", minRealm: 3,
+      benefits: { alchemyBonus: 0.3, expBonus: 0.15 }, skills: ["混元功", "炼丹术"] }
+];
+
+const sectRanks = [
+    { name: "外门弟子", contribution: 0, dailyQuests: 2, benefit: 1 },
+    { name: "内门弟子", contribution: 500, dailyQuests: 3, benefit: 1.2 },
+    { name: "核心弟子", contribution: 2000, dailyQuests: 4, benefit: 1.5 },
+    { name: "真传弟子", contribution: 5000, dailyQuests: 5, benefit: 2 },
+    { name: "长老", contribution: 10000, dailyQuests: 6, benefit: 3 }
+];
+
+const sectQuests = [
+    { name: "宗门巡逻", desc: "巡逻宗门领地", reward: { contribution: 50, exp: 30, gold: 20 } },
+    { name: "采集灵草", desc: "为宗门采集灵草", reward: { contribution: 80, exp: 50, gold: 30 } },
+    { name: "猎杀妖兽", desc: "猎杀危害宗门的妖兽", reward: { contribution: 120, exp: 80, gold: 50 } },
+    { name: "护送任务", desc: "护送宗门弟子", reward: { contribution: 100, exp: 60, gold: 40 } },
+    { name: "探索遗迹", desc: "探索上古遗迹", reward: { contribution: 200, exp: 150, gold: 100 } }
+];
+
+const residenceBuildings = [
+    { key: "spiritField", name: "灵田", icon: "🌱", description: "种植灵草，每小时产出灵石",
+      costs: [150, 400, 1000, 2500, 6000], production: [8, 20, 50, 120, 300] },
+    { key: "alchemyRoom", name: "炼丹房", icon: "⚗️", description: "提升炼丹成功率",
+      costs: [300, 800, 2000, 5000, 12000], bonus: [8, 15, 25, 40, 60] },
+    { key: "forgeRoom", name: "炼器室", icon: "🔨", description: "提升炼器成功率",
+      costs: [300, 800, 2000, 5000, 12000], bonus: [8, 15, 25, 40, 60] },
+    { key: "spiritPool", name: "灵池", icon: "💧", description: "自动恢复生机，打坐收益加成",
+      costs: [600, 1800, 5000, 12000, 30000], regen: [3, 8, 18, 45, 100], meditationBonus: [0.15, 0.35, 0.8, 2, 5] }
+];
+
+const aiPlayerNames = ["李逍遥", "赵灵儿", "林月如", "阿奴", "酒剑仙", "独孤剑圣", "姜婉儿", "刘晋元", "唐钰", "石长老",
+    "韩菱纱", "慕容紫英", "龙葵", "重楼", "飞蓬", "夕瑶", "景天", "雪见", "徐长卿", "紫萱",
+    "云天河", "韩菱纱", "柳梦璃", "慕容紫英", "玄霄", "夙玉", "云天青", "青阳", "重光", "宗炼"];
+
+const aiPlayers = [];
+
+function generateAIPlayers() {
+    aiPlayers.length = 0;
+    for (var i = 0; i < 20; i++) {
+        var realm = Math.floor(Math.random() * 5);
+        var stage = Math.floor(Math.random() * 9) + 1;
+        aiPlayers.push({
+            id: "ai_" + i,
+            name: aiPlayerNames[i],
+            realm: realm,
+            stage: stage,
+            realmName: realms[realm].name,
+            power: Math.floor((realm * 100 + stage * 10) * (0.8 + Math.random() * 0.4)),
+            sect: sects[Math.floor(Math.random() * sects.length)].id,
+            isMaster: false,
+            isDisciple: false,
+            isPartner: false
+        });
+    }
+}
+
+generateAIPlayers();
+
+const masterBenefits = {
+    expBonus: 0.2,
+    atkBonus: 0.1,
+    defBonus: 0.1
+};
+
+const discipleBenefits = {
+    expBonus: 0.1,
+    goldBonus: 0.15
+};
+
+const partnerBenefits = {
+    expBonus: 0.3,
+    hpBonus: 0.15,
+    atkBonus: 0.15,
+    meditationBonus: 0.5
 };
 
 const zones = [
-    { name: "森林", color: "#22c55e", monsters: [
-        { name: "史莱姆", sprite: "🟢", hp: 80, atk: 8, def: 2, exp: 20, gold: 10, speed: 5 },
-        { name: "野狼", sprite: "🐺", hp: 120, atk: 12, def: 4, exp: 35, gold: 20, speed: 12 },
-        { name: "山贼", sprite: "🏴‍☠️", hp: 180, atk: 18, def: 6, exp: 60, gold: 40, speed: 8 }
+    { name: "青云山脉", color: "#22c55e", description: "灵气充沛的入门修炼之地", monsters: [
+        { name: "灵兔", sprite: "🐰", hp: 60, atk: 6, def: 1, exp: 15, gold: 8, speed: 5, type: "妖兽" },
+        { name: "野狼妖", sprite: "🐺", hp: 100, atk: 10, def: 2, exp: 25, gold: 15, speed: 10, type: "妖兽" },
+        { name: "山魈", sprite: "👺", hp: 150, atk: 15, def: 4, exp: 40, gold: 30, speed: 8, type: "精怪" }
     ], unlockLevel: 1 },
-    { name: "草原", color: "#84cc16", monsters: [
-        { name: "毒蛇", sprite: "🐍", hp: 100, atk: 15, def: 3, exp: 40, gold: 25, speed: 15 },
-        { name: "野猪", sprite: "🐗", hp: 160, atk: 18, def: 5, exp: 55, gold: 35, speed: 7 },
-        { name: "土匪头目", sprite: "💀", hp: 220, atk: 22, def: 8, exp: 80, gold: 55, speed: 6 }
+    { name: "万兽谷", color: "#84cc16", description: "妖兽横行的危险山谷", monsters: [
+        { name: "毒蟒", sprite: "🐍", hp: 180, atk: 14, def: 3, exp: 60, gold: 35, speed: 12, type: "妖兽" },
+        { name: "铁背野猪", sprite: "🐗", hp: 250, atk: 18, def: 5, exp: 85, gold: 50, speed: 6, type: "妖兽" },
+        { name: "虎妖", sprite: "🐯", hp: 350, atk: 24, def: 8, exp: 120, gold: 80, speed: 5, type: "妖兽" }
     ], unlockLevel: 3 },
-    { name: "洞穴", color: "#8b5cf6", monsters: [
-        { name: "洞穴蝙蝠", sprite: "🦇", hp: 150, atk: 20, def: 5, exp: 80, gold: 50, speed: 18 },
-        { name: "石像鬼", sprite: "🗿", hp: 250, atk: 25, def: 12, exp: 120, gold: 80, speed: 3 },
-        { name: "毒蝎", sprite: "🦂", hp: 200, atk: 30, def: 8, exp: 100, gold: 70, speed: 10 }
+    { name: "幽冥洞窟", color: "#8b5cf6", description: "阴气森森的地下洞窟", monsters: [
+        { name: "吸血蝙蝠", sprite: "🦇", hp: 300, atk: 22, def: 5, exp: 150, gold: 90, speed: 15, type: "妖兽" },
+        { name: "石灵", sprite: "🗿", hp: 500, atk: 28, def: 15, exp: 220, gold: 140, speed: 3, type: "精怪" },
+        { name: "蝎妖", sprite: "🦂", hp: 400, atk: 35, def: 10, exp: 180, gold: 110, speed: 8, type: "妖兽" }
     ], unlockLevel: 5 },
-    { name: "火山", color: "#f97316", monsters: [
-        { name: "熔岩怪", sprite: "🔥", hp: 280, atk: 32, def: 10, exp: 150, gold: 100, speed: 4 },
-        { name: "火焰蜥蜴", sprite: "🦎", hp: 350, atk: 38, def: 15, exp: 200, gold: 140, speed: 8 },
-        { name: "火山巨魔", sprite: "👹", hp: 450, atk: 45, def: 20, exp: 280, gold: 200, speed: 3 }
+    { name: "赤焰火山", color: "#f97316", description: "地火喷涌的修炼禁地", monsters: [
+        { name: "熔岩兽", sprite: "🔥", hp: 600, atk: 38, def: 12, exp: 300, gold: 180, speed: 4, type: "灵兽" },
+        { name: "火蜥蜴", sprite: "🦎", hp: 800, atk: 45, def: 18, exp: 400, gold: 250, speed: 6, type: "妖兽" },
+        { name: "炎魔", sprite: "👹", hp: 1000, atk: 55, def: 25, exp: 550, gold: 350, speed: 3, type: "魔物" }
     ], unlockLevel: 8 },
-    { name: "冰原", color: "#06b6d4", monsters: [
-        { name: "冰霜狼", sprite: "🐺", hp: 320, atk: 35, def: 12, exp: 180, gold: 120, speed: 14 },
-        { name: "雪巨人", sprite: "❄️", hp: 420, atk: 42, def: 18, exp: 250, gold: 180, speed: 3 },
-        { name: "冰龙", sprite: "🐉", hp: 550, atk: 50, def: 25, exp: 350, gold: 280, speed: 6 }
+    { name: "极寒冰原", color: "#06b6d4", description: "万年冰封的极寒之地", monsters: [
+        { name: "冰狼妖", sprite: "🐺", hp: 900, atk: 48, def: 15, exp: 450, gold: 300, speed: 12, type: "妖兽" },
+        { name: "雪妖", sprite: "❄️", hp: 1200, atk: 58, def: 22, exp: 600, gold: 420, speed: 3, type: "精怪" },
+        { name: "冰蛟", sprite: "🐉", hp: 1500, atk: 68, def: 30, exp: 800, gold: 550, speed: 5, type: "灵兽" }
     ], unlockLevel: 12 },
-    { name: "暗夜城堡", color: "#6366f1", monsters: [
-        { name: "骷髅战士", sprite: "💀", hp: 380, atk: 40, def: 15, exp: 220, gold: 160, speed: 6 },
-        { name: "黑暗骑士", sprite: "🖤", hp: 500, atk: 48, def: 22, exp: 320, gold: 240, speed: 8 },
-        { name: "吸血鬼公爵", sprite: "🧛", hp: 650, atk: 55, def: 28, exp: 420, gold: 350, speed: 10 }
+    { name: "魔域", color: "#6366f1", description: "魔气弥漫的恐怖领域", monsters: [
+        { name: "骷髅兵", sprite: "💀", hp: 1200, atk: 55, def: 20, exp: 550, gold: 380, speed: 5, type: "魔物" },
+        { name: "魔将", sprite: "🖤", hp: 1800, atk: 68, def: 30, exp: 800, gold: 550, speed: 6, type: "魔物" },
+        { name: "血魔", sprite: "🧛", hp: 2200, atk: 80, def: 38, exp: 1000, gold: 700, speed: 8, type: "魔物" }
     ], unlockLevel: 15 },
-    { name: "天空之城", color: "#ec4899", monsters: [
-        { name: "飞行魔像", sprite: "🤖", hp: 480, atk: 45, def: 20, exp: 300, gold: 220, speed: 5 },
-        { name: "雷电之神", sprite: "⚡", hp: 600, atk: 55, def: 25, exp: 400, gold: 320, speed: 15 },
-        { name: "天使长", sprite: "👼", hp: 800, atk: 65, def: 30, exp: 550, gold: 450, speed: 12 }
+    { name: "仙界遗迹", color: "#ec4899", description: "上古仙人留下的遗迹", monsters: [
+        { name: "傀儡守卫", sprite: "🤖", hp: 2000, atk: 70, def: 35, exp: 900, gold: 600, speed: 4, type: "精怪" },
+        { name: "雷灵", sprite: "⚡", hp: 2800, atk: 85, def: 42, exp: 1200, gold: 800, speed: 12, type: "灵兽" },
+        { name: "仙兽", sprite: "👼", hp: 3500, atk: 100, def: 50, exp: 1500, gold: 1000, speed: 10, type: "灵兽" }
     ], unlockLevel: 18 },
-    { name: "BOSS领域", color: "#ef4444", monsters: [
-        { name: "暗影刺客", sprite: "🌑", hp: 400, atk: 35, def: 10, exp: 200, gold: 150, speed: 20, highDodge: 15 },
-        { name: "巨石魔像", sprite: "🗿", hp: 600, atk: 40, def: 25, exp: 300, gold: 250, speed: 3 },
-        { name: "巨龙", sprite: "🐲", hp: 1000, atk: 50, def: 20, exp: 500, gold: 500, speed: 8 }
+    { name: "天劫之地", color: "#ef4444", description: "渡劫飞升的最终试炼", monsters: [
+        { name: "暗影魔", sprite: "🌑", hp: 1800, atk: 65, def: 25, exp: 800, gold: 500, speed: 18, highDodge: 15, type: "魔物" },
+        { name: "山岭巨人", sprite: "🗿", hp: 3000, atk: 80, def: 45, exp: 1200, gold: 800, speed: 3, type: "精怪" },
+        { name: "真龙", sprite: "🐲", hp: 5000, atk: 120, def: 60, exp: 2000, gold: 1500, speed: 6, type: "神兽" }
     ], unlockLevel: 10, isBossZone: true }
 ];
 
 const pets = [
-    { id: "littleWolf", name: "小狼", sprite: "🐕", atk: 5, hp: 30, def: 2, rarity: "common", zone: 0, evolveReq: { kills: 10, petId: "adultWolf" } },
-    { id: "adultWolf", name: "成年狼", sprite: "🐺", atk: 12, hp: 60, def: 5, rarity: "rare", zone: 2, evolveReq: { kills: 30, petId: "wolfKing" } },
-    { id: "wolfKing", name: "狼王", sprite: "🐺‍👑", atk: 25, hp: 120, def: 15, rarity: "epic", zone: 5, evolveReq: null },
+    { id: "littleWolf", name: "灵狼幼崽", sprite: "🐕", atk: 5, hp: 30, def: 2, rarity: "common", zone: 0, evolveReq: { kills: 10, petId: "adultWolf" } },
+    { id: "adultWolf", name: "疾风狼", sprite: "🐺", atk: 12, hp: 60, def: 5, rarity: "rare", zone: 2, evolveReq: { kills: 30, petId: "wolfKing" } },
+    { id: "wolfKing", name: "啸月狼王", sprite: "🐺‍👑", atk: 25, hp: 120, def: 15, rarity: "epic", zone: 5, evolveReq: null },
 
-    { id: "slime", name: "史莱姆", sprite: "🟢", atk: 3, hp: 40, def: 3, rarity: "common", zone: 0, evolveReq: { kills: 10, petId: "blueSlime" } },
-    { id: "blueSlime", name: "蓝史莱姆", sprite: "🟦", atk: 8, hp: 70, def: 8, rarity: "rare", zone: 2, evolveReq: { kills: 30, petId: "slimeKing" } },
-    { id: "slimeKing", name: "史莱姆王", sprite: "👑", atk: 18, hp: 150, def: 20, rarity: "legend", zone: 6, evolveReq: null },
+    { id: "slime", name: "灵液怪", sprite: "🟢", atk: 3, hp: 40, def: 3, rarity: "common", zone: 0, evolveReq: { kills: 10, petId: "blueSlime" } },
+    { id: "blueSlime", name: "蓝灵液怪", sprite: "🟦", atk: 8, hp: 70, def: 8, rarity: "rare", zone: 2, evolveReq: { kills: 30, petId: "slimeKing" } },
+    { id: "slimeKing", name: "灵液妖王", sprite: "👑", atk: 18, hp: 150, def: 20, rarity: "legend", zone: 6, evolveReq: null },
 
-    { id: "bird", name: "小鸟", sprite: "🐦", atk: 4, hp: 25, def: 1, rarity: "common", zone: 0, evolveReq: { kills: 10, petId: "eagle" } },
-    { id: "eagle", name: "老鹰", sprite: "🦅", atk: 15, hp: 55, def: 8, rarity: "rare", zone: 3, evolveReq: { kills: 30, petId: "phoenix" } },
+    { id: "bird", name: "灵雀", sprite: "🐦", atk: 4, hp: 25, def: 1, rarity: "common", zone: 0, evolveReq: { kills: 10, petId: "eagle" } },
+    { id: "eagle", name: "苍鹰", sprite: "🦅", atk: 15, hp: 55, def: 8, rarity: "rare", zone: 3, evolveReq: { kills: 30, petId: "phoenix" } },
     { id: "phoenix", name: "凤凰", sprite: "🔥", atk: 30, hp: 180, def: 25, rarity: "legend", zone: 7, evolveReq: null },
 
-    { id: "fireSpirit", name: "火精灵", sprite: "🔥", atk: 8, hp: 40, def: 3, rarity: "rare", zone: 3, evolveReq: { kills: 25, petId: "fireElemental" } },
-    { id: "fireElemental", name: "火元素", sprite: "🌋", atk: 22, hp: 100, def: 12, rarity: "epic", zone: 5, evolveReq: null },
+    { id: "fireSpirit", name: "火灵", sprite: "🔥", atk: 8, hp: 40, def: 3, rarity: "rare", zone: 3, evolveReq: { kills: 25, petId: "fireElemental" } },
+    { id: "fireElemental", name: "炎灵", sprite: "🌋", atk: 22, hp: 100, def: 12, rarity: "epic", zone: 5, evolveReq: null },
 
-    { id: "iceSpirit", name: "冰精灵", sprite: "❄️", atk: 7, hp: 45, def: 4, rarity: "rare", zone: 4, evolveReq: { kills: 25, petId: "iceElemental" } },
-    { id: "iceElemental", name: "冰元素", sprite: "🧊", atk: 20, hp: 110, def: 15, rarity: "epic", zone: 6, evolveReq: null },
+    { id: "iceSpirit", name: "冰灵", sprite: "❄️", atk: 7, hp: 45, def: 4, rarity: "rare", zone: 4, evolveReq: { kills: 25, petId: "iceElemental" } },
+    { id: "iceElemental", name: "寒灵", sprite: "🧊", atk: 20, hp: 110, def: 15, rarity: "epic", zone: 6, evolveReq: null },
 
-    { id: "iceFox", name: "冰狐狸", sprite: "🦊", atk: 10, hp: 50, def: 5, rarity: "rare", zone: 4, evolveReq: { kills: 25, petId: "nineTails" } },
+    { id: "iceFox", name: "雪狐", sprite: "🦊", atk: 10, hp: 50, def: 5, rarity: "rare", zone: 4, evolveReq: { kills: 25, petId: "nineTails" } },
     { id: "nineTails", name: "九尾狐", sprite: "🦊", atk: 28, hp: 140, def: 18, rarity: "legend", zone: 7, evolveReq: null },
 
-    { id: "shadowCat", name: "暗影猫", sprite: "🐈‍⬛", atk: 15, hp: 60, def: 8, rarity: "epic", zone: 5, evolveReq: { kills: 20, petId: "nightLord" } },
-    { id: "nightLord", name: "暗夜领主", sprite: "🌑", atk: 35, hp: 160, def: 25, rarity: "legend", zone: 7, evolveReq: null },
+    { id: "shadowCat", name: "影猫", sprite: "🐈‍⬛", atk: 15, hp: 60, def: 8, rarity: "epic", zone: 5, evolveReq: { kills: 20, petId: "nightLord" } },
+    { id: "nightLord", name: "夜王", sprite: "🌑", atk: 35, hp: 160, def: 25, rarity: "legend", zone: 7, evolveReq: null },
 
-    { id: "darkWizard", name: "暗之法师", sprite: "🧙", atk: 18, hp: 70, def: 10, rarity: "epic", zone: 6, evolveReq: { kills: 20, petId: "archmage" } },
-    { id: "archmage", name: "大魔导师", sprite: "🧙‍♂️", atk: 40, hp: 200, def: 30, rarity: "legend", zone: 8, evolveReq: null },
+    { id: "darkWizard", name: "暗法师", sprite: "🧙", atk: 18, hp: 70, def: 10, rarity: "epic", zone: 6, evolveReq: { kills: 20, petId: "archmage" } },
+    { id: "archmage", name: "法尊", sprite: "🧙‍♂️", atk: 40, hp: 200, def: 30, rarity: "legend", zone: 8, evolveReq: null },
 
     { id: "dragon", name: "幼龙", sprite: "🐲", atk: 20, hp: 100, def: 15, rarity: "legend", zone: 7, evolveReq: { kills: 15, petId: "dragonKing" } },
     { id: "dragonKing", name: "龙皇", sprite: "🐉", atk: 50, hp: 300, def: 40, rarity: "mythic", zone: 8, evolveReq: null }
@@ -394,133 +640,257 @@ var petInventory = [];
 var petKillCount = {};
 
 const skillTree = {
-    attack: {
-        name: "攻击系",
+    fire: {
+        name: "火系法术",
         skills: [
-            { id: "heavyStrike", name: "重击", desc: "造成1.5倍伤害", cost: 0, maxCd: 2, type: "active", unlocked: true },
-            { id: "doubleStrike", name: "双重打击", desc: "攻击2次", cost: 1, maxCd: 4, type: "active", unlocked: false, requires: "heavyStrike" },
-            { id: "execute", name: "处决", desc: "对血量低于30%的敌人伤害+50%", cost: 2, maxCd: 5, type: "passive", unlocked: false, requires: "doubleStrike" },
-            { id: "berserk", name: "狂暴", desc: "血量越低攻击越高", cost: 3, maxCd: 0, type: "passive", unlocked: false, requires: "execute" }
+            { id: "fireBall", name: "火球术", desc: "造成1.5倍伤害", cost: 0, maxCd: 2, type: "active", unlocked: true },
+            { id: "fireWall", name: "火墙术", desc: "造成2倍伤害并灼烧", cost: 1, maxCd: 4, type: "active", unlocked: false, requires: "fireBall" },
+            { id: "meteor", name: "流星火雨", desc: "造成3倍伤害", cost: 2, maxCd: 5, type: "active", unlocked: false, requires: "fireWall" },
+            { id: "phoenix", name: "凤凰涅槃", desc: "死亡时满生机重生(每场斗法1次)", cost: 3, maxCd: 0, type: "passive", unlocked: false, requires: "meteor" }
         ]
     },
-    defense: {
-        name: "防御系",
+    water: {
+        name: "水系法术",
         skills: [
-            { id: "ironWall", name: "铁壁", desc: "防御+10", cost: 0, maxCd: 3, type: "active", unlocked: true },
-            { id: "shieldBlock", name: "盾墙", desc: "完全抵挡一次攻击", cost: 1, maxCd: 6, type: "active", unlocked: false, requires: "ironWall" },
-            { id: "counter", name: "反击", desc: "受击时反弹20%伤害", cost: 2, maxCd: 0, type: "passive", unlocked: false, requires: "shieldBlock" },
-            { id: "fortress", name: "堡垒", desc: "防御+15%，每回合恢复2%血量", cost: 3, maxCd: 0, type: "passive", unlocked: false, requires: "counter" }
+            { id: "iceShield", name: "玄冰盾", desc: "防御+10", cost: 0, maxCd: 3, type: "active", unlocked: true },
+            { id: "heal", name: "回春术", desc: "恢复生机", cost: 1, maxCd: 5, type: "active", unlocked: false, requires: "iceShield" },
+            { id: "frost", name: "冰封千里", desc: "冰封妖兽一轮", cost: 2, maxCd: 6, type: "active", unlocked: false, requires: "heal" },
+            { id: "regen", name: "生生不息", desc: "每轮恢复生机", cost: 3, maxCd: 0, type: "passive", unlocked: false, requires: "frost" }
         ]
     },
-    utility: {
-        name: "辅助系",
+    thunder: {
+        name: "雷系法术",
         skills: [
-            { id: "combo", name: "连击", desc: "连续攻击2次", cost: 0, maxCd: 4, type: "active", unlocked: true },
-            { id: "swift", name: "疾风", desc: "闪避率+10%", cost: 1, maxCd: 0, type: "passive", unlocked: false, requires: "combo" },
-            { id: "secondWind", name: "喘息", desc: "死亡时恢复30%血量(每战斗1次)", cost: 2, maxCd: 0, type: "passive", unlocked: false, requires: "swift" },
-            { id: "secondLife", name: "第二条命", desc: "致命伤害时不死(每战斗1次)", cost: 3, maxCd: 0, type: "passive", unlocked: false, requires: "secondWind" }
+            { id: "thunder", name: "掌心雷", desc: "连击2次", cost: 0, maxCd: 4, type: "active", unlocked: true },
+            { id: "speed", name: "雷动九天", desc: "闪避率+10%", cost: 1, maxCd: 0, type: "passive", unlocked: false, requires: "thunder" },
+            { id: "chain", name: "连锁闪电", desc: "连击3次", cost: 2, maxCd: 5, type: "active", unlocked: false, requires: "speed" },
+            { id: "godThunder", name: "九天神雷", desc: "造成4倍伤害", cost: 3, maxCd: 6, type: "active", unlocked: false, requires: "chain" }
+        ]
+    },
+    sword: {
+        name: "剑道",
+        skills: [
+            { id: "swordQi", name: "剑气", desc: "造成1.8倍伤害", cost: 0, maxCd: 3, type: "active", unlocked: false },
+            { id: "swordArray", name: "剑阵", desc: "连击2次", cost: 1, maxCd: 4, type: "active", unlocked: false, requires: "swordQi" },
+            { id: "swordIntent", name: "剑意", desc: "暴击率+15%", cost: 2, maxCd: 0, type: "passive", unlocked: false, requires: "swordArray" },
+            { id: "swordDomain", name: "剑域", desc: "伤害+30%", cost: 3, maxCd: 0, type: "passive", unlocked: false, requires: "swordIntent" }
         ]
     }
 };
 
 const equipPool = {
     weapon: [
-        { name: "铁剑", atk: 5, price: 50 },
-        { name: "钢剑", atk: 10, crit: 5, price: 120 },
-        { name: "炎魔之刃", atk: 18, crit: 10, price: 300 },
-        { name: "龙息剑", atk: 25, crit: 15, price: 600 }
+        { name: "桃木剑", atk: 8, price: 80, type: "法器", description: "入门修士常用法器" },
+        { name: "青锋剑", atk: 15, crit: 5, price: 200, type: "灵器", description: "削铁如泥的宝剑" },
+        { name: "赤焰剑", atk: 25, crit: 10, price: 500, type: "法宝", description: "蕴含火灵之力的飞剑" },
+        { name: "龙渊剑", atk: 40, crit: 15, price: 1200, type: "古宝", description: "上古剑修遗留的至宝" }
     ],
     armor: [
-        { name: "皮甲", def: 5, price: 50 },
-        { name: "锁子甲", def: 10, hp: 20, price: 120 },
-        { name: "骑士板甲", def: 18, hp: 50, price: 300 },
-        { name: "龙鳞护甲", def: 25, hp: 100, dodge: 5, price: 600 }
+        { name: "布衣", def: 8, price: 80, type: "法器", description: "凡俗修士的衣物" },
+        { name: "软甲", def: 15, hp: 30, price: 200, type: "灵器", description: "金丝软甲，刀枪不入" },
+        { name: "玄铁战甲", def: 28, hp: 80, price: 500, type: "法宝", description: "玄铁打造的重甲" },
+        { name: "龙鳞宝甲", def: 40, hp: 150, dodge: 8, price: 1200, type: "古宝", description: "真龙鳞片炼制的宝甲" }
     ],
     accessory: [
-        { name: "敏捷戒指", dodge: 8, price: 80 },
-        { name: "暴击戒指", crit: 10, price: 100 },
-        { name: "生命护符", hp: 30, maxHp: 30, price: 150 },
-        { name: "龙心坠", crit: 8, dodge: 8, hp: 50, price: 400 }
+        { name: "疾风戒", dodge: 10, price: 120, type: "灵器", description: "增加身法的指环" },
+        { name: "破军戒", crit: 12, price: 150, type: "灵器", description: "增加暴击的指环" },
+        { name: "长生坠", hp: 50, maxHp: 50, price: 250, type: "法宝", description: "延年益寿的玉坠" },
+        { name: "混沌珠", crit: 12, dodge: 12, hp: 80, price: 800, type: "古宝", description: "蕴含混沌之力的宝珠" }
     ]
 };
 
 const quests = [
-    { id: "q1", name: "初出茅庐", desc: "击败5只怪物", target: 5, progress: 0, reward: { gold: 50, exp: 100 }, zone: 0, completed: false },
-    { id: "q2", name: "森林探索者", desc: "在森林击败10只怪物", target: 10, progress: 0, reward: { gold: 100, exp: 200 }, zone: 0, completed: false },
-    { id: "q3", name: "草原猎人", desc: "在草原击败10只怪物", target: 10, progress: 0, reward: { gold: 150, exp: 250 }, zone: 1, completed: false },
-    { id: "q4", name: "洞穴探险家", desc: "在洞穴击败10只怪物", target: 10, progress: 0, reward: { gold: 200, crit: 3 }, zone: 2, completed: false },
-    { id: "q5", name: "火山征服者", desc: "在火山击败10只怪物", target: 10, progress: 0, reward: { gold: 300, atk: 5 }, zone: 3, completed: false },
-    { id: "q6", name: "冰原冒险家", desc: "在冰原击败10只怪物", target: 10, progress: 0, reward: { gold: 400, def: 5 }, zone: 4, completed: false },
-    { id: "q7", name: "暗夜骑士", desc: "在暗夜城堡击败10只怪物", target: 10, progress: 0, reward: { gold: 500, hp: 30 }, zone: 5, completed: false },
-    { id: "q8", name: "天空探索者", desc: "在天城击败10只怪物", target: 10, progress: 0, reward: { gold: 600, crit: 3, dodge: 3 }, zone: 6, completed: false },
-    { id: "q9", name: "屠龙勇士", desc: "击败巨龙", target: 1, progress: 0, reward: { gold: 1000, atk: 10, def: 10 }, zone: 7, completed: false, isBossQuest: true },
-    { id: "q10", name: "富甲一方", desc: "拥有1000金币", target: 1000, progress: 0, reward: { exp: 500 }, isGoldQuest: true },
-    { id: "q11", name: "连胜达人", desc: "连续击败5只怪物不逃跑", target: 5, progress: 0, reward: { dodge: 5, hp: 30 }, zone: -1, completed: false },
-    { id: "q12", name: "世界征服者", desc: "累计击败100只怪物", target: 100, progress: 0, reward: { atk: 20, def: 20, hp: 100 }, zone: -2, completed: false }
+    { id: "q1", name: "初出茅庐", desc: "斩灭5只妖兽", target: 5, progress: 0, reward: { gold: 50, exp: 100 }, zone: 0, completed: false },
+    { id: "q2", name: "青云山脉探索者", desc: "在青云山脉斩灭10只妖兽", target: 10, progress: 0, reward: { gold: 100, exp: 200 }, zone: 0, completed: false },
+    { id: "q3", name: "万兽谷猎人", desc: "在万兽谷斩灭10只妖兽", target: 10, progress: 0, reward: { gold: 150, exp: 250 }, zone: 1, completed: false },
+    { id: "q4", name: "幽冥洞窟探险家", desc: "在幽冥洞窟斩灭10只妖兽", target: 10, progress: 0, reward: { gold: 200, crit: 3 }, zone: 2, completed: false },
+    { id: "q5", name: "赤焰火山征服者", desc: "在赤焰火山斩灭10只妖兽", target: 10, progress: 0, reward: { gold: 300, atk: 5 }, zone: 3, completed: false },
+    { id: "q6", name: "极寒冰原冒险家", desc: "在极寒冰原斩灭10只妖兽", target: 10, progress: 0, reward: { gold: 400, def: 5 }, zone: 4, completed: false },
+    { id: "q7", name: "暗夜骑士", desc: "在魔域斩灭10只妖兽", target: 10, progress: 0, reward: { gold: 500, hp: 30 }, zone: 5, completed: false },
+    { id: "q8", name: "天空探索者", desc: "在仙界遗迹斩灭10只妖兽", target: 10, progress: 0, reward: { gold: 600, crit: 3, dodge: 3 }, zone: 6, completed: false },
+    { id: "q9", name: "屠龙勇士", desc: "斩灭真龙", target: 1, progress: 0, reward: { gold: 1000, atk: 10, def: 10 }, zone: 7, completed: false, isBossQuest: true },
+    { id: "q10", name: "富甲一方", desc: "拥有1000灵石", target: 1000, progress: 0, reward: { exp: 500 }, isGoldQuest: true },
+    { id: "q11", name: "连胜达人", desc: "连续斩灭5只妖兽不遁走", target: 5, progress: 0, reward: { dodge: 5, hp: 30 }, zone: -1, completed: false },
+    { id: "q12", name: "世界征服者", desc: "累计斩灭100只妖兽", target: 100, progress: 0, reward: { atk: 20, def: 20, hp: 100 }, zone: -2, completed: false }
 ];
 
+const storyChapters = [
+    { id: "s1", title: "初入仙途", realmRequired: 0, completed: false, unlocked: true,
+      dialogues: [
+        { speaker: "神秘老者", text: "小友，我观你根骨清奇，乃是修仙之才..." },
+        { speaker: "神秘老者", text: "这青云山脉灵气充沛，正是修炼之地。你且先去寻找些妖兽历练。" },
+        { speaker: "系统", text: "点击【寻找妖兽】开始你的修仙之路！" }
+      ]
+    },
+    { id: "s2", title: "初窥门径", realmRequired: 0, stageRequired: 3, completed: false, unlocked: false,
+      dialogues: [
+        { speaker: "神秘老者", text: "不错，你已初步踏入修炼之门。" },
+        { speaker: "神秘老者", text: "修炼一途，功法神通至关重要。去【功法】界面学习更多神通吧。" },
+        { speaker: "系统", text: "点击【功法】学习强力技能！" }
+      ]
+    },
+    { id: "s3", title: "筑基之境", realmRequired: 1, completed: false, unlocked: false,
+      dialogues: [
+        { speaker: "神秘老者", text: "恭喜！你已突破筑基，踏入修仙第二境。" },
+        { speaker: "神秘老者", text: "筑基之后，需渡天劫方可继续精进。渡劫虽有风险，但收益巨大。" },
+        { speaker: "系统", text: "境界突破需要渡劫，做好准备再尝试！" }
+      ]
+    },
+    { id: "s4", title: "宗门之邀", realmRequired: 1, completed: false, unlocked: false,
+      dialogues: [
+        { speaker: "青云宗长老", text: "小友资质不凡，可愿加入我青云宗？" },
+        { speaker: "青云宗长老", text: "加入宗门可获得各种加成，还能领取宗门任务。" },
+        { speaker: "系统", text: "点击【宗门】加入宗门，获得更多收益！" }
+      ]
+    },
+    { id: "s5", title: "洞府之便", realmRequired: 2, completed: false, unlocked: false,
+      dialogues: [
+        { speaker: "神秘老者", text: "你有自己的洞府了吗？" },
+        { speaker: "神秘老者", text: "洞府可种植灵田、建造炼丹房，长时间离线也能获得收益。" },
+        { speaker: "系统", text: "点击【洞府】建设你的修仙之地！" }
+      ]
+    },
+    { id: "s6", title: "仙缘之遇", realmRequired: 2, completed: false, unlocked: false,
+      dialogues: [
+        { speaker: "神秘老者", text: "修仙之路漫长，有个道侣双修可事半功倍。" },
+        { speaker: "神秘老者", text: "道侣可为你在修炼时提供大量加成。" },
+        { speaker: "系统", text: "点击【仙缘】寻找你的另一半！" }
+      ]
+    },
+    { id: "s7", title: "金丹大道", realmRequired: 3, completed: false, unlocked: false,
+      dialogues: [
+        { speaker: "神秘老者", text: "金丹一成，寿命千年，你已非寻常修士可比。" },
+        { speaker: "神秘老者", text: "前方还有更广阔的天地，等待你去探索。" }
+      ]
+    },
+    { id: "s8", title: "渡劫飞升", realmRequired: 8, completed: false, unlocked: false,
+      dialogues: [
+        { speaker: "神秘老者", text: "大乘期已是凡间极致，接下来便是渡劫飞升。" },
+        { speaker: "神秘老者", text: "度过飞升仙劫，便可羽化登仙，成为真正的仙人！" }
+      ]
+    }
+];
+
+let currentStoryIndex = 0;
+let storyDialogueIndex = 0;
+
+const dungeons = [
+    { id: "d1", name: "青云秘窟", realmRequired: 0, recommendedStage: 3, difficulty: "easy",
+      floors: 5, monsters: [
+        { name: "守窟傀儡", hp: 200, atk: 15, def: 5, exp: 80, gold: 50 },
+        { name: "洞穴妖藤", hp: 300, atk: 20, def: 8, exp: 120, gold: 80 }
+      ],
+      rewards: { gold: 500, exp: 300, item: "attackScroll" },
+      description: "青云山脉深处的秘境，适合初期历练" },
+    { id: "d2", name: "万兽巢穴", realmRequired: 1, recommendedStage: 6, difficulty: "medium",
+      floors: 8, monsters: [
+        { name: "兽王", hp: 800, atk: 35, def: 15, exp: 300, gold: 200 },
+        { name: "兽潮", hp: 600, atk: 28, def: 10, exp: 250, gold: 150 }
+      ],
+      rewards: { gold: 1500, exp: 800, item: "defenseScroll" },
+      description: "万兽谷深处的危险巢穴，击败兽王可获得稀有奖励" },
+    { id: "d3", name: "幽冥深渊", realmRequired: 2, recommendedStage: 9, difficulty: "hard",
+      floors: 10, monsters: [
+        { name: "深渊恶灵", hp: 1500, atk: 50, def: 20, exp: 500, gold: 350 },
+        { name: "冥王", hp: 2500, atk: 80, def: 35, exp: 1000, gold: 800 }
+      ],
+      rewards: { gold: 3000, exp: 2000, item: "critCrystal" },
+      description: "幽冥洞窟深处的恐怖之地，危机四伏" },
+    { id: "d4", name: "火山熔岩", realmRequired: 4, recommendedStage: 15, difficulty: "hard",
+      floors: 12, monsters: [
+        { name: "熔岩巨兽", hp: 3000, atk: 90, def: 40, exp: 1200, gold: 800 },
+        { name: "炎帝", hp: 5000, atk: 150, def: 60, exp: 2500, gold: 2000 }
+      ],
+      rewards: { gold: 8000, exp: 5000, item: "spiritStonePouch" },
+      description: "赤焰火山深处的禁忌之地" },
+    { id: "d5", name: "仙劫试炼", realmRequired: 7, recommendedStage: 25, difficulty: "extreme",
+      floors: 15, monsters: [
+        { name: "天劫化身", hp: 8000, atk: 200, def: 80, exp: 5000, gold: 3000 },
+        { name: "仙人残魂", hp: 12000, atk: 300, def: 120, exp: 10000, gold: 5000 }
+      ],
+      rewards: { gold: 20000, exp: 15000, item: "immortalCore" },
+      description: "天劫之地最深处的终极试炼，挑战仙人的极限" }
+];
+
+let currentDungeon = null;
+let currentDungeonFloor = 0;
+let dungeonBattleActive = false;
+let dungeonMonster = null;
+
+const tutorials = [
+    { id: "t1", step: 1, title: "欢迎来到修仙世界", content: "修仙问道是一款修仙类文字放置游戏。点击【寻找妖兽】开始你的修仙之路！", trigger: "start" },
+    { id: "t2", step: 2, title: "战斗系统", content: "战斗中点击头像或技能按钮释放技能。火球术造成1.5倍伤害，金刚罩提升防御，御剑诀可连攻2次！", trigger: "firstBattle" },
+    { id: "t3", step: 3, title: "境界突破", content: "积累足够的修为即可突破境界。点击【突破瓶颈】或【渡劫】提升境界，境界越高修炼效率越高！", trigger: "reachStage3" },
+    { id: "t4", step: 4, title: "装备强化", content: "在【法宝阁】购买装备，在【炼器】中强化装备，可大幅提升战力！", trigger: "buyEquip" },
+    { id: "t5", step: 5, title: "宗门系统", content: "加入宗门可获得属性加成，完成宗门任务获得贡献值，提升宗门地位！", trigger: "joinSect" },
+    { id: "t6", step: 6, title: "洞府系统", content: "建设洞府可获得灵石产出。灵田每小时产出灵石，炼丹房提升炼丹成功率！", trigger: "buildResidence" },
+    { id: "t7", step: 7, title: "师徒道侣", content: "拜师可获得修炼加成，收徒可获得灵石分成。寻找道侣双修可获得巨额修为！", trigger: "reachRealm2" }
+];
+
+let completedTutorials = [];
+
 const achievements = [
-    { id: "a1", name: "初次冒险", desc: "击败第一只怪物", title: "冒险者", condition: function(p) { return p.killCount >= 1; }, reward: { gold: 20, item: "healthPotion" }, unlocked: false },
-    { id: "a2", name: "森林霸主", desc: "在森林击败20只怪物", title: "森林猎手", condition: function(p) { return (p.zoneKills || {})[0] >= 20; }, reward: { gold: 100, item: "attackScroll" }, unlocked: false },
-    { id: "a3", name: "草原猎人", desc: "在草原击败20只怪物", title: "草原勇士", condition: function(p) { return (p.zoneKills || {})[1] >= 20; }, reward: { gold: 150, item: "defenseScroll" }, unlocked: false },
-    { id: "a4", name: "洞穴征服者", desc: "在洞穴击败20只怪物", title: "洞穴探索者", condition: function(p) { return (p.zoneKills || {})[2] >= 20; }, reward: { gold: 200, item: "critCrystal" }, unlocked: false },
-    { id: "a5", name: "火山征服者", desc: "在火山击败20只怪物", title: "火焰战士", condition: function(p) { return (p.zoneKills || {})[3] >= 20; }, reward: { gold: 300, item: "highHealthPotion" }, unlocked: false },
-    { id: "a6", name: "冰原探险家", desc: "在冰原击败20只怪物", title: "寒冰勇者", condition: function(p) { return (p.zoneKills || {})[4] >= 20; }, reward: { gold: 400, item: "luckyCoin" }, unlocked: false },
-    { id: "a7", name: "暗夜骑士团", desc: "在暗夜城堡击败20只怪物", title: "暗夜骑士", condition: function(p) { return (p.zoneKills || {})[5] >= 20; }, reward: { gold: 500, item: "resurrectionScroll" }, unlocked: false },
-    { id: "a8", name: "天空探索者", desc: "在天城击败20只怪物", title: "天空使者", condition: function(p) { return (p.zoneKills || {})[6] >= 20; }, reward: { gold: 800, item: "highHealthPotion" }, unlocked: false },
-    { id: "a9", name: "屠龙者", desc: "击败巨龙", title: "龙骑士", condition: function(p) { return p.bossDefeated >= 1; }, reward: { gold: 500, item: "resurrectionScroll" }, unlocked: false },
-    { id: "a10", name: "万元户", desc: "累计获得2000金币", title: "富甲一方", condition: function(p) { return p.totalGoldEarned >= 2000; }, reward: { gold: 200, item: "attackScroll" }, unlocked: false },
-    { id: "a11", name: "事件达人", desc: "触发30次随机事件", title: "命运眷顾", condition: function(p) { return p.eventCount >= 30; }, reward: { gold: 150, item: "luckyCoin" }, unlocked: false },
-    { id: "a12", name: "任务完成者", desc: "完成15个任务", title: "任务大师", condition: function(p) { return p.questCompleted >= 15; }, reward: { exp: 1500, item: "highHealthPotion" }, unlocked: false },
-    { id: "a13", name: "升级达人", desc: "达到30级", title: "巅峰强者", condition: function(p) { return p.lv >= 30; }, reward: { atk: 20, def: 20, item: "attackScroll" }, unlocked: false },
-    { id: "a14", name: "世界征服者", desc: "累计击败200只怪物", title: "天下无敌", condition: function(p) { return p.killCount >= 200; }, reward: { atk: 30, def: 30, hp: 200, item: "resurrectionScroll" }, unlocked: false },
-    { id: "a15", name: "宠物训练师", desc: "获得第一只宠物", title: "驯兽师", condition: function(p) { return p.pet !== null; }, reward: { gold: 50 }, unlocked: false },
-    { id: "a16", name: "宠物进化家", desc: "让宠物进化一次", title: "培育专家", condition: function(p) { return p.pet && p.pet.id !== "slime" && p.pet.id !== "littleWolf" && p.pet.id !== "bird"; }, reward: { gold: 300, item: "highHealthPotion" }, unlocked: false }
+    { id: "a1", name: "初次冒险", desc: "斩灭第一只妖兽", title: "初入道途", condition: function(p) { return p.killCount >= 1; }, reward: { gold: 20, item: "healthPotion" }, unlocked: false },
+    { id: "a2", name: "青云山脉霸主", desc: "在青云山脉斩灭20只妖兽", title: "青云猎手", condition: function(p) { return (p.zoneKills || {})[0] >= 20; }, reward: { gold: 100, item: "attackScroll" }, unlocked: false },
+    { id: "a3", name: "万兽谷猎人", desc: "在万兽谷斩灭20只妖兽", title: "万兽勇士", condition: function(p) { return (p.zoneKills || {})[1] >= 20; }, reward: { gold: 150, item: "defenseScroll" }, unlocked: false },
+    { id: "a4", name: "幽冥洞窟征服者", desc: "在幽冥洞窟斩灭20只妖兽", title: "幽冥行者", condition: function(p) { return (p.zoneKills || {})[2] >= 20; }, reward: { gold: 200, item: "critCrystal" }, unlocked: false },
+    { id: "a5", name: "赤焰火山征服者", desc: "在赤焰火山斩灭20只妖兽", title: "烈焰修士", condition: function(p) { return (p.zoneKills || {})[3] >= 20; }, reward: { gold: 300, item: "highHealthPotion" }, unlocked: false },
+    { id: "a6", name: "极寒冰原探险家", desc: "在极寒冰原斩灭20只妖兽", title: "寒冰修士", condition: function(p) { return (p.zoneKills || {})[4] >= 20; }, reward: { gold: 400, item: "luckyCoin" }, unlocked: false },
+    { id: "a7", name: "暗夜骑士团", desc: "在魔域斩灭20只妖兽", title: "魔域行者", condition: function(p) { return (p.zoneKills || {})[5] >= 20; }, reward: { gold: 500, item: "resurrectionScroll" }, unlocked: false },
+    { id: "a8", name: "天空探索者", desc: "在仙界遗迹斩灭20只妖兽", title: "仙迹探索者", condition: function(p) { return (p.zoneKills || {})[6] >= 20; }, reward: { gold: 800, item: "highHealthPotion" }, unlocked: false },
+    { id: "a9", name: "屠龙者", desc: "斩灭真龙", title: "斩龙真人", condition: function(p) { return p.bossDefeated >= 1; }, reward: { gold: 500, item: "resurrectionScroll" }, unlocked: false },
+    { id: "a10", name: "万元户", desc: "累计获得2000灵石", title: "富甲修真界", condition: function(p) { return p.totalGoldEarned >= 2000; }, reward: { gold: 200, item: "attackScroll" }, unlocked: false },
+    { id: "a11", name: "奇遇达人", desc: "触发30次随机奇遇", title: "命运眷顾", condition: function(p) { return p.eventCount >= 30; }, reward: { gold: 150, item: "luckyCoin" }, unlocked: false },
+    { id: "a12", name: "任务完成者", desc: "完成15个任务", title: "任务达人", condition: function(p) { return p.questCompleted >= 15; }, reward: { exp: 1500, item: "highHealthPotion" }, unlocked: false },
+    { id: "a13", name: "突破达人", desc: "达到30级", title: "化神巅峰", condition: function(p) { return p.lv >= 30; }, reward: { atk: 20, def: 20, item: "attackScroll" }, unlocked: false },
+    { id: "a14", name: "世界征服者", desc: "累计斩灭200只妖兽", title: "修真至尊", condition: function(p) { return p.killCount >= 200; }, reward: { atk: 30, def: 30, hp: 200, item: "resurrectionScroll" }, unlocked: false },
+    { id: "a15", name: "灵宠训练师", desc: "获得第一只灵宠", title: "灵宠师", condition: function(p) { return p.pet !== null; }, reward: { gold: 50 }, unlocked: false },
+    { id: "a16", name: "灵宠进化家", desc: "让灵宠进化一次", title: "灵宠大师", condition: function(p) { return p.pet && p.pet.id !== "slime" && p.pet.id !== "littleWolf" && p.pet.id !== "bird"; }, reward: { gold: 300, item: "highHealthPotion" }, unlocked: false }
 ];
 
 const randomEvents = [
-    { id: "e1", name: "发现宝箱", type: "choice", desc: "你发现了一个宝箱！", effect: function() {
+    { id: "e1", name: "发现洞天福地", type: "choice", desc: "你发现了一个洞天福地！", effect: function() {
         var gold = Math.floor(Math.random() * 50) + 20;
-        player.gold += gold;
-        addLog("🎁 开启宝箱，获得 " + gold + " 金币！", 'event');
+        player.spiritStones += gold;
+        addLog("🎁 开启洞天福地，获得 " + gold + " 灵石！", 'event');
     }},
-    { id: "e2", name: "老练商人", type: "choice", desc: "一个商人向你推销物品", effect: function() {
+    { id: "e2", name: "老练散修", type: "choice", desc: "一个散修向你推销物品", effect: function() {
         var healAmount = 50;
         player.hp = Math.min(getTotalMaxHp(), player.hp + healAmount);
-        addLog("🧪 商人赠送药水，恢复 " + healAmount + " 血量！", 'event');
+        addLog("🧪 散修赠送丹药，恢复 " + healAmount + " 生机！", 'event');
     }},
     { id: "e3", name: "陷阱", type: "danger", desc: "你不小心踩到了陷阱！", effect: function() {
         var dmg = Math.floor(Math.random() * 20) + 10;
         player.hp -= dmg;
         addLog("⚠️ 陷阱造成 " + dmg + " 点伤害！", 'damage');
     }},
-    { id: "e4", name: "神秘祝福", type: "buff", desc: "获得神秘力量的祝福", effect: function() {
-        player.buffs.push({ name: '祝福', type: 'buff', turns: 3, onTurnEnd: function(p) {
+    { id: "e4", name: "神秘福缘", type: "buff", desc: "获得神秘力量的福缘", effect: function() {
+        player.buffs.push({ name: '福缘', type: 'buff', turns: 3, onTurnEnd: function(p) {
             p.hp = Math.min(getTotalMaxHp(), p.hp + 5);
         }});
-        addLog("✨ 获得祝福：每回合恢复5血量，持续3回合！", 'buff');
+        addLog("✨ 获得福缘：每轮恢复5生机，持续3轮！", 'buff');
     }},
-    { id: "e5", name: "诅咒", type: "debuff", desc: "遭遇黑暗力量侵蚀", effect: function() {
-        player.buffs.push({ name: '诅咒', type: 'debuff', turns: 3, onTurnEnd: function(p) {
+    { id: "e5", name: "心魔", type: "debuff", desc: "遭遇黑暗力量侵蚀", effect: function() {
+        player.buffs.push({ name: '心魔', type: 'debuff', turns: 3, onTurnEnd: function(p) {
             p.atk = Math.max(1, p.atk - 2);
         }});
-        addLog("💀 受到诅咒：攻击-2，持续3回合！", 'debuff');
+        addLog("💀 受到心魔：攻击-2，持续3轮！", 'debuff');
     }},
-    { id: "e6", name: "经验泉水", type: "choice", desc: "发现一口神奇的泉水", effect: function() {
+    { id: "e6", name: "修为泉水", type: "choice", desc: "发现一口神奇的泉水", effect: function() {
         var expGain = Math.floor(Math.random() * 30) + 20;
-        player.exp += expGain;
+        player.qi += expGain;
         checkLevelUp();
-        addLog("📚 饮用泉水，获得 " + expGain + " 经验！", 'event');
+        addLog("📚 饮用泉水，获得 " + expGain + " 修为！", 'event');
     }},
-    { id: "e7", name: "盗贼袭击", type: "danger", desc: "遭遇盗贼团袭击！", effect: function() {
-        var goldLost = Math.floor(player.gold * 0.2);
-        player.gold -= goldLost;
-        addLog("💰 盗贼抢走了 " + goldLost + " 金币！", 'damage');
+    { id: "e7", name: "邪修袭击", type: "danger", desc: "遭遇邪修团袭击！", effect: function() {
+        var goldLost = Math.floor(player.spiritStones * 0.2);
+        player.spiritStones -= goldLost;
+        addLog("💰 邪修抢走了 " + goldLost + " 灵石！", 'damage');
     }},
-    { id: "e8", name: "修行顿悟", type: "buff", desc: "战斗中突然顿悟", effect: function() {
+    { id: "e8", name: "修行顿悟", type: "buff", desc: "斗法中突然顿悟", effect: function() {
         player.atk += 3;
         player.def += 2;
-        addLog("🧘 顿悟：攻击+3，防御+2！（本次战斗）", 'buff');
+        addLog("🧘 顿悟：攻击+3，防御+2！（本次斗法）", 'buff');
     }}
 ];
 
@@ -540,51 +910,71 @@ var inventory = [];
 var discoveredMonsters = {};
 
 var items = [
-    { id: "healthPotion", name: "治疗药水", desc: "恢复30点血量", type: "consumable", effect: function() {
+    { id: "healthPotion", name: "回春丹", desc: "恢复30点生机", type: "consumable", effect: function() {
         if (player.hp >= getTotalMaxHp()) return false;
         player.hp = Math.min(getTotalMaxHp(), player.hp + 30);
         return true;
     }},
-    { id: "superHealthPotion", name: "高级治疗药水", desc: "恢复80点血量", type: "consumable", effect: function() {
+    { id: "superHealthPotion", name: "高级回春丹", desc: "恢复80点生机", type: "consumable", effect: function() {
         if (player.hp >= getTotalMaxHp()) return false;
         player.hp = Math.min(getTotalMaxHp(), player.hp + 80);
         return true;
     }},
-    { id: "attackScroll", name: "力量卷轴", desc: "攻击+3(战斗)", type: "consumable", effect: function() {
+    { id: "attackScroll", name: "聚力符", desc: "攻击+3(斗法)", type: "consumable", effect: function() {
         player.buffs.push({ name: '力量', type: 'buff', turns: 3, onTurnEnd: function(p, isPlayer) {
             if (isPlayer) p.atk += 3;
         }});
         return true;
     }},
-    { id: "defenseScroll", name: "护盾卷轴", desc: "防御+5(战斗)", type: "consumable", effect: function() {
-        player.buffs.push({ name: '护盾', type: 'buff', turns: 3, onTurnEnd: function(p, isPlayer) {
+    { id: "defenseScroll", name: "护体符", desc: "防御+5(斗法)", type: "consumable", effect: function() {
+        player.buffs.push({ name: '护体罡气', type: 'buff', turns: 3, onTurnEnd: function(p, isPlayer) {
             if (isPlayer) p.def += 5;
         }});
         return true;
     }},
-    { id: "critCrystal", name: "暴击水晶", desc: "本场战斗暴击率+15%", type: "consumable", effect: function() {
-        player.buffs.push({ name: '暴击水晶', type: 'buff', turns: 999, onApply: function() { player.crit += 15; }, onRemove: function() { player.crit -= 15; }});
+    { id: "critCrystal", name: "暴击灵石", desc: "本场斗法暴击率+15%", type: "consumable", effect: function() {
+        player.buffs.push({ name: '暴击灵石', type: 'buff', turns: 999, onApply: function() { player.crit += 15; }, onRemove: function() { player.crit -= 15; }});
         return true;
     }},
-    { id: "goldCoin", name: "幸运金币", desc: "下只怪物金币+50%", type: "consumable", effect: function() {
-        player.buffs.push({ name: '幸运', type: 'buff', turns: 1 });
+    { id: "goldCoin", name: "聚宝灵石", desc: "下只妖兽灵石+50%", type: "consumable", effect: function() {
+        player.buffs.push({ name: '福缘', type: 'buff', turns: 1 });
         return true;
     }},
-    { id: "antidote", name: "解毒药", desc: "解除当前诅咒", type: "consumable", effect: function() {
-        var idx = player.buffs.findIndex(function(b) { return b.name === '诅咒'; });
+    { id: "antidote", name: "清心丹", desc: "解除当前心魔", type: "consumable", effect: function() {
+        var idx = player.buffs.findIndex(function(b) { return b.name === '心魔'; });
         if (idx >= 0) { player.buffs.splice(idx, 1); return true; }
         return false;
     }},
-    { id: "resurrectionScroll", name: "复活卷轴", desc: "死亡时自动复活并恢复50%血量", type: "consumable", effect: function() {
-        player.buffs.push({ name: '复活', type: 'buff', turns: 999 });
+    { id: "resurrectionScroll", name: "替身傀儡", desc: "死亡时自动重生并恢复50%生机", type: "consumable", effect: function() {
+        player.buffs.push({ name: '重生', type: 'buff', turns: 999 });
         return true;
     }},
-    { id: "petUpgradeFruit", name: "宠物升级果实", desc: "使用后宠物属性+10%", type: "consumable", effect: function() {
-        if (!player.pet) { addLog("你没有伙伴！"); return false; }
+    { id: "petUpgradeFruit", name: "灵宠丹", desc: "使用后灵宠属性+10%", type: "consumable", effect: function() {
+        if (!player.pet) { addLog("你没有灵宠！"); return false; }
         player.pet.atk = Math.floor(player.pet.atk * 1.1);
         player.pet.def = Math.floor(player.pet.def * 1.1);
         player.pet.hp = Math.floor(player.pet.hp * 1.1);
-        addLog("🍎 宠物【" + player.pet.name + "】属性提升10%！", 'buff');
+        addLog("🍎 灵宠【" + player.pet.name + "】属性提升10%！", 'buff');
+        return true;
+    }},
+    { id: "spiritStonePouch", name: "灵石袋", desc: "使用后获得500灵石", type: "consumable", effect: function() {
+        player.spiritStones += 500;
+        addLog("💎 获得500灵石！", 'buff');
+        return true;
+    }},
+    { id: "immortalCore", name: "仙核", desc: "使用后获得2000修为", type: "consumable", effect: function() {
+        player.qi += 2000;
+        addLog("✨ 获得2000修为！", 'buff');
+        return true;
+    }},
+    { id: "realmPill", name: "境界丹", desc: "使用后突破当前境界瓶颈", type: "consumable", effect: function() {
+        if (player.stage < 3 || player.stage === 9) {
+            addLog("当前境界无需使用此丹药！");
+            return false;
+        }
+        var bonus = 500;
+        player.qi += bonus;
+        addLog("💊 境界丹发挥奇效，修为+" + bonus + "！", 'buff');
         return true;
     }}
 ];
@@ -609,6 +999,15 @@ function getTotalAtk() {
     if (player.equipment.weapon) atk += player.equipment.weapon.atk;
     atk += (player.equipmentEnhanceLevels.weapon || 0) * 2;
     if (petSummoned && player.pet) atk += player.pet.atk + petEnergyBoost;
+    var rootBonus = getSpiritRootBonus();
+    atk += rootBonus.atkBonus;
+    if (player.sect.id) {
+        var sect = sects.find(function(s) { return s.id === player.sect.id; });
+        var rankData = sectRanks.find(function(r) { return r.name === player.sect.rank; });
+        if (sect && sect.benefits.atkBonus) atk = Math.floor(atk * (1 + sect.benefits.atkBonus * rankData.benefit));
+    }
+    if (player.master.id) atk = Math.floor(atk * (1 + masterBenefits.atkBonus));
+    if (player.partner.id) atk = Math.floor(atk * (1 + partnerBenefits.atkBonus));
     return atk;
 }
 
@@ -617,7 +1016,15 @@ function getTotalDef() {
     if (player.equipment.armor) def += player.equipment.armor.def;
     def += (player.equipmentEnhanceLevels.armor || 0) * 2;
     if (player.pet) def += player.pet.def;
-    if (player.learnedSkills.indexOf("堡垒") >= 0) def = Math.floor(def * 1.15);
+    var rootBonus = getSpiritRootBonus();
+    def += rootBonus.defBonus;
+    if (player.learnedSkills.indexOf("不动如山") >= 0) def = Math.floor(def * 1.15);
+    if (player.sect.id) {
+        var sect = sects.find(function(s) { return s.id === player.sect.id; });
+        var rankData = sectRanks.find(function(r) { return r.name === player.sect.rank; });
+        if (sect && sect.benefits.defBonus) def = Math.floor(def * (1 + sect.benefits.defBonus * rankData.benefit));
+    }
+    if (player.master.id) def = Math.floor(def * (1 + masterBenefits.defBonus));
     return def;
 }
 
@@ -625,6 +1032,11 @@ function getTotalCrit() {
     var crit = player.crit;
     if (player.equipment.weapon && player.equipment.weapon.crit) crit += player.equipment.weapon.crit;
     if (player.equipment.accessory && player.equipment.accessory.crit) crit += player.equipment.accessory.crit;
+    if (player.sect.id) {
+        var sect = sects.find(function(s) { return s.id === player.sect.id; });
+        var rankData = sectRanks.find(function(r) { return r.name === player.sect.rank; });
+        if (sect && sect.benefits.critBonus) crit += sect.benefits.critBonus * rankData.benefit;
+    }
     return crit;
 }
 
@@ -639,6 +1051,11 @@ function getTotalDodge() {
 function getTotalSpeed() {
     var speed = player.speed || 10;
     if (player.equipment.accessory && player.equipment.accessory.speed) speed += player.equipment.accessory.speed;
+    if (player.sect.id) {
+        var sect = sects.find(function(s) { return s.id === player.sect.id; });
+        var rankData = sectRanks.find(function(r) { return r.name === player.sect.rank; });
+        if (sect && sect.benefits.speedBonus) speed += sect.benefits.speedBonus * rankData.benefit;
+    }
     return speed;
 }
 
@@ -648,18 +1065,26 @@ function getTotalMaxHp() {
     if (player.equipment.accessory && player.equipment.accessory.maxHp) maxHp += player.equipment.accessory.maxHp;
     maxHp += (player.equipmentEnhanceLevels.armor || 0) * 10;
     if (player.pet) maxHp += player.pet.hp;
+    var rootBonus = getSpiritRootBonus();
+    maxHp += rootBonus.hpBonus;
+    if (player.sect.id) {
+        var sect = sects.find(function(s) { return s.id === player.sect.id; });
+        var rankData = sectRanks.find(function(r) { return r.name === player.sect.rank; });
+        if (sect && sect.benefits.hpBonus) maxHp = Math.floor(maxHp * (1 + sect.benefits.hpBonus * rankData.benefit));
+    }
+    if (player.partner.id) maxHp = Math.floor(maxHp * (1 + partnerBenefits.hpBonus));
     return maxHp;
 }
 
 function switchZone(index) {
-    if (player.lv < zones[index].unlockLevel) {
+    if (player.realm < zones[index].unlockLevel) {
         addLog("需要达到 " + zones[index].unlockLevel + " 级才能进入" + zones[index].name + "！", 'debuff');
         return;
     }
     if (player.currentZone === index) return;
     player.currentZone = index;
     nowMonster = { buffs: [] };
-    addLog("📍 切换到【" + zones[index].name + "】，遭遇更强的怪物！");
+    addLog("📍 切换到【" + zones[index].name + "】，遭遇更强的妖兽！");
     updateUI();
 }
 
@@ -679,14 +1104,14 @@ function updateEquipSlots() {
         armorSlot.innerHTML = "<span class=\"slot-name\">🛡️ 防具</span><span class=\"item-name\">无</span>";
     }
     if (player.equipment.accessory) {
-        accessorySlot.innerHTML = "<span class=\"slot-name\">💍 饰品</span><span class=\"item-name\">" + player.equipment.accessory.name + "</span><span class=\"item-stats\">已装备</span>";
+        accessorySlot.innerHTML = "<span class=\"slot-name\">💍 灵饰</span><span class=\"item-name\">" + player.equipment.accessory.name + "</span><span class=\"item-stats\">已装备</span>";
     } else {
-        accessorySlot.innerHTML = "<span class=\"slot-name\">💍 饰品</span><span class=\"item-name\">无</span>";
+        accessorySlot.innerHTML = "<span class=\"slot-name\">💍 灵饰</span><span class=\"item-name\">无</span>";
     }
 }
 
 function updateBuffs() {
-    document.getElementById('playerBuffs').innerHTML = player.buffs.map(function(b) { return "<span class=\"" + b.type + "-item\">" + b.name + ":" + b.turns + "回合</span>"; }).join('');
+    document.getElementById('playerBuffs').innerHTML = player.buffs.map(function(b) { return "<span class=\"" + b.type + "-item\">" + b.name + ":" + b.turns + "轮</span>"; }).join('');
     player.buffs.forEach(function(b) {
         if (b.onTurnEnd && !b.activated) {
             b.onTurnEnd(player, true);
@@ -722,7 +1147,7 @@ function updateQuests() {
 
     quests.forEach(function(q) {
         if (q.isGoldQuest) {
-            q.progress = player.gold;
+            q.progress = player.spiritStones;
         } else if (q.isBossQuest) {
             q.progress = player.bossDefeated;
         } else if (q.zone === -1) {
@@ -738,13 +1163,13 @@ function updateQuests() {
     questList.innerHTML = quests.map(function(q) {
         var canComplete = q.progress >= q.target && !q.completed;
         var rewardText = [];
-        if (q.reward.gold) rewardText.push(q.reward.gold + "金币");
-        if (q.reward.exp) rewardText.push(q.reward.exp + "经验");
+        if (q.reward.gold) rewardText.push(q.reward.gold + "灵石");
+        if (q.reward.exp) rewardText.push(q.reward.exp + "修为");
         if (q.reward.atk) rewardText.push("攻击+" + q.reward.atk);
         if (q.reward.def) rewardText.push("防御+" + q.reward.def);
         if (q.reward.crit) rewardText.push("暴击+" + q.reward.crit + "%");
         if (q.reward.dodge) rewardText.push("闪避+" + q.reward.dodge + "%");
-        if (q.reward.hp) rewardText.push("血量+" + q.reward.hp);
+        if (q.reward.hp) rewardText.push("生机+" + q.reward.hp);
 
         return "<div class=\"quest-item " + (q.completed ? 'completed' : '') + "\">" +
             "<div class=\"quest-name\">" + q.name + (canComplete ? "<button onclick=\"claimQuest('" + q.id + "')\" style=\"padding:2px 6px;font-size:10px;background:#22c55e;\">领取</button>" : '') + "</div>" +
@@ -763,11 +1188,11 @@ function claimQuest(qid) {
     questCompleted++;
 
     if (q.reward.gold) {
-        player.gold += q.reward.gold;
+        player.spiritStones += q.reward.gold;
         totalGoldEarned += q.reward.gold;
     }
     if (q.reward.exp) {
-        player.exp += q.reward.exp;
+        player.qi += q.reward.exp;
         checkLevelUp();
     }
     if (q.reward.atk) player.atk += q.reward.atk;
@@ -804,11 +1229,11 @@ function checkAchievements() {
         if (!a.unlocked && a.condition(player)) {
             a.unlocked = true;
             if (a.reward.gold) {
-                player.gold += a.reward.gold;
+                player.spiritStones += a.reward.gold;
                 totalGoldEarned += a.reward.gold;
             }
             if (a.reward.exp) {
-                player.exp += a.reward.exp;
+                player.qi += a.reward.exp;
                 checkLevelUp();
             }
             if (a.reward.atk) player.atk += a.reward.atk;
@@ -834,10 +1259,15 @@ function checkAchievements() {
 }
 
 function newMonster() {
+    if (player.meditation.active) {
+        stopMeditation();
+        addLog("⚠️ 进入斗法，自动停止打坐！");
+    }
+
     var zone = zones[player.currentZone];
     var rand = Math.floor(Math.random() * zone.monsters.length);
     var template = zone.monsters[rand];
-    var levelBonus = Math.max(0, player.lv - zone.unlockLevel);
+    var levelBonus = Math.max(0, player.realm - zone.unlockLevel);
     var monsterLevel = zone.unlockLevel + levelBonus;
 
     nowMonster = {
@@ -862,7 +1292,7 @@ function newMonster() {
     battleNextAction = getTotalSpeed() >= nowMonster.speed ? 'player' : 'monster';
     var initDelay = getBattleDelay(800);
     setTimeout(function() {
-        addLog("⚔️ 战斗开始！");
+        addLog("⚔️ 斗法开始！");
         processAutoBattle();
     }, initDelay);
     updateUI();
@@ -893,33 +1323,33 @@ function doPlayerAttack() {
     
     var tempDefBoost = 0;
     player.buffs = player.buffs.filter(function(b) {
-        if (b.name === '铁壁') {
+        if (b.name === '金钟罩') {
             if (b.shieldCount && b.shieldCount > 0) {
                 b.shieldCount--;
                 if (b.shieldCount <= 0) {
-                    addLog("🛡️ 护盾消耗完毕！", 'buff');
+                    addLog("🛡️ 护体罡气消耗完毕！", 'buff');
                     return false;
                 }
-                addLog("🛡️ 护盾生效，抵挡攻击！剩余" + b.shieldCount + "次", 'buff');
+                addLog("🛡️ 护体罡气生效，抵挡攻击！剩余" + b.shieldCount + "次", 'buff');
                 return false;
             }
             tempDefBoost = 10;
-            addLog("🛡️ 铁壁效果：防御临时+10", 'buff');
+            addLog("🛡️ 金钟罩效果：防御临时+10", 'buff');
             return false;
         }
-        if (b.name === '诅咒') return true;
+        if (b.name === '心魔') return true;
         return true;
     });
 
     var isCrit = Math.random() * 100 < getTotalCrit();
     var dmg = Math.max(1, getTotalAtk() - nowMonster.def - nowMonster.tempDefBoost);
 
-    if (player.learnedSkills.indexOf("狂暴") >= 0) {
+    if (player.learnedSkills.indexOf("狂战") >= 0) {
         var hpPercent = player.hp / getTotalMaxHp();
         var berserkBonus = Math.floor((1 - hpPercent) * 10);
         if (berserkBonus > 0) {
             dmg += berserkBonus;
-            addLog("🔥 狂暴效果：攻击+" + berserkBonus, 'buff');
+            addLog("🔥 狂战效果：攻击+" + berserkBonus, 'buff');
         }
     }
 
@@ -945,7 +1375,7 @@ function doPlayerAttack() {
     }, getBattleDelay(150));
 
     nowMonster.hp -= dmg;
-    addLog("⚔️ 你攻击【" + nowMonster.name + "】，造成 <span class=\"damage\">" + dmg + "</span> 点伤害" + (isCrit ? ' <span class="crit">【暴击！】</span>' : ''));
+    addLog("⚔️ 你祭出法术攻击【" + nowMonster.name + "】，造成 <span class=\"damage\">" + dmg + "</span> 点伤害" + (isCrit ? ' <span class="crit">【暴击！】</span>' : ''));
 
     if (nowMonster.hp <= 0) {
         battleActive = false;
@@ -982,14 +1412,14 @@ function doMonsterAttack() {
     if (!battleActive || !nowMonster.name || nowMonster.hp <= 0 || player.hp <= 0) return;
 
     var playerTempDef = 0;
-    var shieldBuff = player.buffs.find(function(b) { return b.name === '铁壁' && b.shieldCount && b.shieldCount > 0; });
+    var shieldBuff = player.buffs.find(function(b) { return b.name === '金钟罩' && b.shieldCount && b.shieldCount > 0; });
     if (shieldBuff) {
         shieldBuff.shieldCount--;
         if (shieldBuff.shieldCount <= 0) {
-            player.buffs = player.buffs.filter(function(b) { return b.name !== '铁壁'; });
-            addLog("🛡️ 盾墙完全抵消了攻击！", 'buff');
+            player.buffs = player.buffs.filter(function(b) { return b.name !== '金钟罩'; });
+            addLog("🛡️ 玄盾完全抵消了攻击！", 'buff');
         } else {
-            addLog("🛡️ 盾墙生效，抵挡攻击！剩余" + shieldBuff.shieldCount + "次", 'buff');
+            addLog("🛡️ 玄盾生效，抵挡攻击！剩余" + shieldBuff.shieldCount + "次", 'buff');
         }
         scheduleNextAction();
         return;
@@ -1028,32 +1458,32 @@ function doMonsterAttack() {
     addLog("【" + nowMonster.name + "】攻击，你受到 <span class=\"damage\">" + dmg + "</span> 点伤害");
 
     if (player.hp <= 0) {
-        var hasResurrection = player.buffs.some(function(b) { return b.name === '复活'; });
+        var hasResurrection = player.buffs.some(function(b) { return b.name === '重生'; });
         if (hasResurrection) {
             player.hp = Math.floor(getTotalMaxHp() * 0.5);
-            player.buffs = player.buffs.filter(function(b) { return b.name !== '复活'; });
-            addLog("✨ 复活卷轴生效！你恢复" + Math.floor(getTotalMaxHp() * 0.5) + "点血量！", 'heal');
+            player.buffs = player.buffs.filter(function(b) { return b.name !== '重生'; });
+            addLog("✨ 替身傀儡生效！你恢复" + Math.floor(getTotalMaxHp() * 0.5) + "点生机！", 'heal');
             updateUI();
             scheduleNextAction();
             return;
         }
-        if (player.learnedSkills.indexOf("第二条命") >= 0 && !battleUsedSkills.secondLife) {
+        if (player.learnedSkills.indexOf("涅槃") >= 0 && !battleUsedSkills.secondLife) {
             player.hp = Math.floor(getTotalMaxHp() * 0.3);
             battleUsedSkills.secondLife = true;
-            addLog("✨ 第二条命触发！你恢复" + Math.floor(getTotalMaxHp() * 0.3) + "点血量！", 'buff');
+            addLog("✨ 涅槃触发！你恢复" + Math.floor(getTotalMaxHp() * 0.3) + "点生机！", 'buff');
             updateUI();
             scheduleNextAction();
             return;
         }
-        if (player.learnedSkills.indexOf("喘息") >= 0 && !battleUsedSkills.secondWind) {
+        if (player.learnedSkills.indexOf("回元") >= 0 && !battleUsedSkills.secondWind) {
             player.hp = Math.floor(getTotalMaxHp() * 0.3);
             battleUsedSkills.secondWind = true;
-            addLog("✨ 喘息触发！你恢复" + Math.floor(getTotalMaxHp() * 0.3) + "点血量！", 'buff');
+            addLog("✨ 回元触发！你恢复" + Math.floor(getTotalMaxHp() * 0.3) + "点生机！", 'buff');
             updateUI();
             scheduleNextAction();
             return;
         }
-        addLog("💀 你被击败了！游戏重置...");
+        addLog("💀 你被斩灭了！身死道消，修为尽散...");
         consecutiveKills = 0;
         saveScore();
         battleActive = false;
@@ -1073,10 +1503,10 @@ function doMonsterAttack() {
     }
 
     processBuffs(nowMonster, false);
-    if (player.learnedSkills.indexOf("堡垒") >= 0) {
+    if (player.learnedSkills.indexOf("不动如山") >= 0) {
         var fortressHeal = Math.floor(getTotalMaxHp() * 0.02);
         player.hp = Math.min(getTotalMaxHp(), player.hp + fortressHeal);
-        addLog("🏰 堡垒效果：恢复 " + fortressHeal + " 点血量", 'heal');
+        addLog("🏰 不动如山效果：恢复 " + fortressHeal + " 点生机", 'heal');
     }
 
     updateUI();
@@ -1096,19 +1526,24 @@ function scheduleNextAction() {
 }
 
 function monsterDefeated() {
+    if (nowMonster.isTribulation) {
+        completeTribulation();
+        return;
+    }
+
     var zone = zones[player.currentZone];
-    addLog("【" + nowMonster.name + "】被击败！获得 <span class=\"gold\">" + nowMonster.exp + "经验、" + nowMonster.gold + "金币</span>");
+    addLog("【" + nowMonster.name + "】被斩灭！获得 <span class=\"gold\">" + nowMonster.exp + "修为、" + nowMonster.gold + "灵石</span>");
 
     var monsterKey = nowMonster.name + '_' + player.currentZone;
     if (!discoveredMonsters[monsterKey]) {
         discoveredMonsters[monsterKey] = { name: nowMonster.name, zone: player.currentZone, count: 1, firstDefeat: new Date().toLocaleDateString() };
-        addLog("📖 图鉴更新：发现新怪物【" + nowMonster.name + "】！", 'achievement');
+        addLog("📖 妖兽图鉴更新：发现新妖兽【" + nowMonster.name + "】！", 'achievement');
     } else {
         discoveredMonsters[monsterKey].count++;
     }
 
     var goldBonus = nowMonster.gold;
-    if (player.buffs.some(function(b) { return b.name === '幸运'; })) goldBonus = Math.floor(goldBonus * 1.5);
+    if (player.buffs.some(function(b) { return b.name === '福缘'; })) goldBonus = Math.floor(goldBonus * 1.5);
 
     if (Math.random() < 0.15) {
         var droppableItems = items.filter(function(i) { return ['healthPotion', 'attackScroll', 'defenseScroll'].indexOf(i.id) >= 0; });
@@ -1117,8 +1552,8 @@ function monsterDefeated() {
         addLog("🎁 战利品：获得【" + randomItem.name + "】！", 'event');
     }
 
-    player.exp += nowMonster.exp;
-    player.gold += goldBonus;
+    player.qi += nowMonster.exp;
+    player.spiritStones += goldBonus;
     totalGoldEarned += goldBonus;
     player.killCount++;
     zoneKills[player.currentZone]++;
@@ -1133,17 +1568,76 @@ function monsterDefeated() {
                 if (evolvedPet) {
                     player.pet = { id: evolvedPet.id, name: evolvedPet.name, sprite: evolvedPet.sprite, atk: evolvedPet.atk, hp: evolvedPet.hp, def: evolvedPet.def, rarity: evolvedPet.rarity };
                     petKillCount[evolvedPet.id] = 0;
-                    addLog("🌟 伙伴进化！【" + evolvedPet.name + "】诞生！", 'buff');
+                    addLog("🌟 灵宠进化！【" + evolvedPet.name + "】诞生！", 'buff');
                 }
             }
         }
     }
 
-    if (zone.isBossZone && (nowMonster.name === '巨龙' || nowMonster.name === '巨石魔像' || nowMonster.name === '暗影刺客')) {
+    if (zone.isBossZone && (nowMonster.name === '真龙' || nowMonster.name === '岩魔' || nowMonster.name === '影魔')) {
         player.bossDefeated++;
     }
 
     checkLevelUp();
+    checkAchievements();
+    updateQuests();
+
+    if (player.disciples.length < 3 && Math.random() < 0.1) {
+        var potentialDisciples = aiPlayers.filter(function(p) {
+            return p.realm < player.realm && !p.isDisciple && !p.isMaster && !p.isPartner && p.id !== player.master.id && p.id !== player.partner.id;
+        });
+        if (potentialDisciples.length > 0) {
+            var newDisciple = potentialDisciples[Math.floor(Math.random() * potentialDisciples.length)];
+            player.disciples.push({ id: newDisciple.id, intimacy: 20 });
+            newDisciple.isDisciple = true;
+            addLog("<span class='buff'>🎉 战斗结束后，" + newDisciple.name + "被你的实力折服，愿拜你为师！</span>");
+        }
+    }
+
+    var monsterSprite = document.getElementById('monsterSprite');
+    if (monsterSprite) {
+        monsterSprite.classList.add('death');
+        setTimeout(function() {
+            monsterSprite.classList.remove('death');
+            nowMonster = { buffs: [] };
+            updateUI();
+        }, getBattleDelay(600));
+    } else {
+        nowMonster = { buffs: [] };
+        updateUI();
+    }
+}
+
+function completeTribulation() {
+    var nextRealmIndex = player.breakthrough.nextRealmIndex;
+    var nextRealm = realms[nextRealmIndex];
+
+    player.realm = nextRealmIndex;
+    player.stage = 1;
+    player.realmName = nextRealm.name;
+
+    var multiplier = nextRealm.multiplier;
+    player.maxHp += Math.floor(20 * multiplier);
+    player.hp = player.maxHp;
+    player.atk += Math.floor(5 * multiplier);
+    player.def += Math.floor(2 * multiplier);
+    player.skillPoints++;
+    player.needQi = Math.floor(player.needQi * 1.5);
+
+    player.qi += nowMonster.exp;
+    player.spiritStones += nowMonster.gold;
+
+    addLog("<span class='levelup'>🎉 渡劫成功！踏入" + nextRealm.name + "！</span>");
+    addLog("<span class='gold'>⚡ 获得天劫馈赠：" + nowMonster.exp + "修为、" + nowMonster.gold + "灵石</span>");
+
+    player.breakthrough = { inProgress: false, type: null, progress: 0, required: 0 };
+
+    var playerSprite = document.getElementById('playerSprite');
+    if (playerSprite) {
+        playerSprite.classList.add('levelup');
+        setTimeout(function() { playerSprite.classList.remove('levelup'); }, getBattleDelay(800));
+    }
+
     checkAchievements();
     updateQuests();
 
@@ -1162,29 +1656,194 @@ function monsterDefeated() {
 }
 
 function checkLevelUp() {
-    while (player.exp >= player.needExp) {
-        player.exp -= player.needExp;
-        player.lv++;
-        player.maxHp += 20;
-        player.hp = Math.min(player.hp + 20, player.maxHp);
-        player.atk += 5;
-        player.def += 2;
+    if (player.qi < player.needQi) return;
+    if (player.breakthrough.inProgress) return;
+
+    player.qi -= player.needQi;
+    var currentRealm = realms[player.realm];
+    var nextStage = player.stage + 1;
+    var isRealmBreakthrough = nextStage > currentRealm.stages;
+    var nextRealmIndex = isRealmBreakthrough ? player.realm + 1 : player.realm;
+
+    if (isRealmBreakthrough && nextRealmIndex >= realms.length) {
+        player.realm = realms.length - 1;
+        player.stage = currentRealm.stages;
+        addLog("<span class=\"levelup\">🎉恭喜道友飞升成仙！</span>");
+        return;
+    }
+
+    var nextRealm = isRealmBreakthrough ? realms[nextRealmIndex] : currentRealm;
+
+    if (isRealmBreakthrough && nextRealm.needTribulation) {
+        startTribulation(nextRealmIndex);
+        return;
+    }
+
+    if (isBottleneckStage(nextStage) && !isRealmBreakthrough) {
+        startBottleneckBreakthrough(nextStage);
+        return;
+    }
+
+    attemptBreakthrough(isRealmBreakthrough, nextRealmIndex);
+}
+
+function startTribulation(nextRealmIndex) {
+    var nextRealm = realms[nextRealmIndex];
+    player.breakthrough = {
+        inProgress: true,
+        type: 'tribulation',
+        progress: 0,
+        required: 1,
+        nextRealmIndex: nextRealmIndex
+    };
+
+    var tribulationData = getTribulationDifficulty(nextRealmIndex);
+    nowMonster = {
+        name: nextRealm.tribulationName,
+        sprite: "⚡",
+        hp: tribulationData.hp,
+        maxHp: tribulationData.hp,
+        atk: tribulationData.atk,
+        def: tribulationData.def,
+        speed: tribulationData.speed,
+        exp: tribulationData.exp,
+        gold: tribulationData.gold,
+        type: "天劫",
+        isTribulation: true,
+        buffs: []
+    };
+
+    battleActive = true;
+    addLog("<span class='levelup'>⚡ " + nextRealm.tribulationName + "降临！战胜天劫方可突破！</span>");
+    updateUI();
+}
+
+function startBottleneckBreakthrough(nextStage) {
+    player.breakthrough = {
+        inProgress: true,
+        type: 'bottleneck',
+        progress: 0,
+        required: 3,
+        nextStage: nextStage
+    };
+
+    var successRate = getBreakthroughSuccessRate(player.realm, nextStage, false);
+    addLog("<span class='levelup'>🌀 遭遇瓶颈！第" + nextStage + "层突破成功率：" + successRate + "%</span>");
+    addLog("<span class='buff'>💡 点击【突破瓶颈】按钮尝试突破（需要消耗修为）</span>");
+    updateUI();
+}
+
+function attemptBreakthrough(isRealmBreakthrough, nextRealmIndex) {
+    var currentRealm = realms[player.realm];
+    var nextRealm = isRealmBreakthrough ? realms[nextRealmIndex] : currentRealm;
+    var nextStage = isRealmBreakthrough ? 1 : player.stage + 1;
+    var successRate = getBreakthroughSuccessRate(player.realm, nextStage, isRealmBreakthrough);
+
+    if (Math.random() * 100 < successRate) {
+        if (isRealmBreakthrough) {
+            player.realm = nextRealmIndex;
+            player.stage = 1;
+            player.realmName = nextRealm.name;
+            addLog("<span class='levelup'>🎉 突破成功！踏入" + nextRealm.name + "！</span>");
+        } else {
+            player.stage = nextStage;
+            addLog("<span class='levelup'>🎉 突破成功！" + nextRealm.name + "第" + player.stage + "层！</span>");
+        }
+
+        var multiplier = nextRealm.multiplier;
+        player.maxHp += Math.floor(20 * multiplier);
+        player.hp = Math.min(player.hp + Math.floor(20 * multiplier), player.maxHp);
+        player.atk += Math.floor(5 * multiplier);
+        player.def += Math.floor(2 * multiplier);
         player.skillPoints++;
-        player.needExp = Math.floor(player.needExp * 1.5);
-        addLog("<span class=\"levelup\">🎉升级！当前等级：" + player.lv + "，获得1点技能点！</span>");
+        player.needQi = Math.floor(player.needQi * 1.5);
+
         var playerSprite = document.getElementById('playerSprite');
         if (playerSprite) {
             playerSprite.classList.add('levelup');
             setTimeout(function() { playerSprite.classList.remove('levelup'); }, getBattleDelay(800));
         }
+    } else {
+        var qiLoss = Math.floor(player.needQi * 0.3);
+        player.qi = Math.max(0, player.qi - qiLoss);
+        addLog("<span class='debuff'>💔 突破失败！修为反噬，损失" + qiLoss + "修为</span>");
+
+        if (Math.random() < 0.3) {
+            var hpLoss = Math.floor(player.maxHp * 0.1);
+            player.hp = Math.max(1, player.hp - hpLoss);
+            addLog("<span class='damage'>💀 经脉受损！生机减少" + hpLoss + "点</span>");
+        }
     }
+
+    player.breakthrough = { inProgress: false, type: null, progress: 0, required: 0 };
     updateZoneButtons();
+    updateUI();
+}
+
+function tryBottleneckBreakthrough() {
+    if (!player.breakthrough.inProgress || player.breakthrough.type !== 'bottleneck') {
+        return addLog("当前没有瓶颈需要突破！");
+    }
+
+    if (player.qi < player.needQi * 0.5) {
+        return addLog("修为不足！需要" + Math.floor(player.needQi * 0.5) + "修为才能尝试突破");
+    }
+
+    player.qi -= Math.floor(player.needQi * 0.5);
+    player.breakthrough.progress++;
+
+    var nextStage = player.breakthrough.nextStage;
+    var successRate = getBreakthroughSuccessRate(player.realm, nextStage, false);
+    var attemptBonus = player.breakthrough.progress * 5;
+    var finalRate = Math.min(95, successRate + attemptBonus);
+
+    addLog("<span class='buff'>🌀 第" + player.breakthrough.progress + "次尝试突破...成功率：" + finalRate + "%</span>");
+
+    if (Math.random() * 100 < finalRate) {
+        player.stage = nextStage;
+        var currentRealm = realms[player.realm];
+        addLog("<span class='levelup'>🎉 突破成功！" + currentRealm.name + "第" + player.stage + "层！</span>");
+
+        var multiplier = currentRealm.multiplier;
+        player.maxHp += Math.floor(20 * multiplier);
+        player.hp = Math.min(player.hp + Math.floor(20 * multiplier), player.maxHp);
+        player.atk += Math.floor(5 * multiplier);
+        player.def += Math.floor(2 * multiplier);
+        player.skillPoints++;
+        player.needQi = Math.floor(player.needQi * 1.5);
+
+        player.breakthrough = { inProgress: false, type: null, progress: 0, required: 0 };
+
+        var playerSprite = document.getElementById('playerSprite');
+        if (playerSprite) {
+            playerSprite.classList.add('levelup');
+            setTimeout(function() { playerSprite.classList.remove('levelup'); }, getBattleDelay(800));
+        }
+    } else {
+        addLog("<span class='debuff'>💔 突破失败！再接再厉！</span>");
+
+        if (player.breakthrough.progress >= player.breakthrough.required) {
+            addLog("<span class='buff'>✨ 多次尝试后终于突破！" + realms[player.realm].name + "第" + nextStage + "层！</span>");
+            player.stage = nextStage;
+            var multiplier = realms[player.realm].multiplier;
+            player.maxHp += Math.floor(20 * multiplier);
+            player.hp = Math.min(player.hp + Math.floor(20 * multiplier), player.maxHp);
+            player.atk += Math.floor(5 * multiplier);
+            player.def += Math.floor(2 * multiplier);
+            player.skillPoints++;
+            player.needQi = Math.floor(player.needQi * 1.5);
+            player.breakthrough = { inProgress: false, type: null, progress: 0, required: 0 };
+        }
+    }
+
+    updateZoneButtons();
+    updateUI();
 }
 
 function useSkill(index) {
-    if (!nowMonster.name || !battleActive) return addLog("请先寻找怪物并进入战斗！");
+    if (!nowMonster.name || !battleActive) return addLog("请先寻找妖兽并进入斗法！");
     var skill = player.skills[index];
-    if (!skill.isReady) return addLog(skill.name + "冷却中！");
+    if (!skill.isReady) return addLog(skill.name + "调息中！");
 
     skill.isReady = false;
     skill.cd = skill.maxCd;
@@ -1197,7 +1856,7 @@ function useSkill(index) {
         var monsterSprite = document.getElementById('monsterSprite');
         monsterSprite.classList.add('skill-burst');
         setTimeout(function() { monsterSprite.classList.remove('skill-burst'); }, getBattleDelay(400));
-        addLog("💥 使用【重击】！造成 <span class=\"damage\">" + dmg + "</span> 点伤害" + (isCrit ? ' <span class="crit">【暴击！】</span>' : ''));
+        addLog("💥 使用【破山击】！造成 <span class=\"damage\">" + dmg + "</span> 点伤害" + (isCrit ? ' <span class="crit">【暴击！】</span>' : ''));
 
         if (player.learnedSkills.indexOf("双重打击") >= 0 && nowMonster.hp > 0) {
             var isCrit2 = Math.random() * 100 < getTotalCrit();
@@ -1208,18 +1867,18 @@ function useSkill(index) {
         }
     } else if (index === 1) {
         var shieldBlockCount = 1;
-        if (player.learnedSkills.indexOf("盾墙") >= 0) shieldBlockCount = 2;
+        if (player.learnedSkills.indexOf("玄盾") >= 0) shieldBlockCount = 2;
         player.buffs.push({
-            name: '铁壁',
+            name: '金钟罩',
             type: 'buff',
             turns: 2,
             shieldCount: shieldBlockCount,
-            onApply: function() { addLog("🛡️ 进入铁壁姿态，可抵挡" + shieldBlockCount + "次攻击", 'buff'); }
+            onApply: function() { addLog("🛡️ 进入金钟罩姿态，可抵挡" + shieldBlockCount + "次攻击", 'buff'); }
         });
         var playerSprite = document.getElementById('playerSprite');
         playerSprite.classList.add('shield-glow');
         setTimeout(function() { playerSprite.classList.remove('shield-glow'); }, getBattleDelay(600));
-        addLog("🛡️ 使用【铁壁】！获得护盾，可抵挡" + shieldBlockCount + "次攻击", 'buff');
+        addLog("🛡️ 使用【金钟罩】！获得护体罡气，可抵挡" + shieldBlockCount + "次攻击", 'buff');
     } else if (index === 2) {
         addLog("⚔️ 使用【连击】！");
         var isCrit = Math.random() * 100 < getTotalCrit();
@@ -1264,7 +1923,7 @@ function updateSkillCooldowns() {
             skill.cd--;
             if (skill.cd <= 0) {
                 skill.isReady = true;
-                addLog("⚡ 技能【" + skill.name + "】冷却完毕！", 'buff');
+                addLog("⚡ 神通【" + skill.name + "】调息完毕！", 'buff');
             }
         }
     });
@@ -1281,10 +1940,10 @@ function processBuffs(creature, isPlayer) {
 function heal() {
     var cost = 5;
     var healAmount = 30;
-    if (player.gold < cost) return addLog("金币不足，无法回血！");
-    player.gold -= cost;
+    if (player.spiritStones < cost) return addLog("灵石不足，无法服用丹药！");
+    player.spiritStones -= cost;
     player.hp = Math.min(getTotalMaxHp(), player.hp + healAmount);
-    addLog("❤️ 消耗" + cost + "金币，恢复" + healAmount + "点血量");
+    addLog("❤️ 消耗" + cost + "灵石，恢复" + healAmount + "点生机");
     updateUI();
 }
 
@@ -1293,20 +1952,20 @@ function run() {
     battleActive = false;
     consecutiveKills = 0;
     if (nowMonster.name && Math.random() < 0.5) {
-        addLog("🏃 逃跑失败！被怪物追上！");
+        addLog("🏃 遁走失败！被妖兽追上！");
         battleActive = true;
         battleNextAction = 'monster';
         scheduleNextAction();
         return;
     }
     nowMonster = { buffs: [] };
-    addLog("🏃 成功逃跑！");
+    addLog("🏃 成功遁走！");
     updateUI();
 }
 
 function triggerRandomEvent() {
     if (currentEvent) {
-        addLog("当前有未处理的事件！", 'debuff');
+        addLog("当前有未处理的奇遇！", 'debuff');
         return;
     }
     var event = randomEvents[Math.floor(Math.random() * randomEvents.length)];
@@ -1330,7 +1989,7 @@ function triggerRandomEvent() {
         confirmBtn.style.background = '#2563eb';
     }
 
-    addLog("🎲 触发事件【" + event.name + "】：" + event.desc, 'event');
+    addLog("🎲 触发奇遇【" + event.name + "】：" + event.desc, 'event');
 }
 
 function confirmEvent() {
@@ -1356,52 +2015,52 @@ function clearEvent() {
 }
 
 function openShop() {
-    var tip = prompt("商店：\n1. 强化攻击(+5攻击) - 30金币\n2. 强化防御(+3防御) - 25金币\n3. 永久暴击(+2%暴击) - 50金币\n4. 永久闪避(+2%闪避) - 50金币\n5. 升级血量上限(+20) - 40金币\n请输入序号");
-    if (tip === "1" && player.gold >= 30) {
-        player.gold -= 30;
+    var tip = prompt("坊市：\n1. 祭炼攻击(+5攻击) - 50灵石\n2. 祭炼防御(+4防御) - 40灵石\n3. 永久暴击(+2%暴击) - 80灵石\n4. 永久闪避(+2%闪避) - 80灵石\n5. 突破生机上限(+30) - 60灵石\n请输入序号(1-5)");
+    if (tip === "1" && player.spiritStones >= 50) {
+        player.spiritStones -= 50;
         player.atk += 5;
         addLog("攻击永久+5");
-    } else if (tip === "2" && player.gold >= 25) {
-        player.gold -= 25;
-        player.def += 3;
-        addLog("防御永久+3");
-    } else if (tip === "3" && player.gold >= 50) {
-        player.gold -= 50;
+    } else if (tip === "2" && player.spiritStones >= 40) {
+        player.spiritStones -= 40;
+        player.def += 4;
+        addLog("防御永久+4");
+    } else if (tip === "3" && player.spiritStones >= 80) {
+        player.spiritStones -= 80;
         player.crit += 2;
         addLog("暴击率永久+2%");
-    } else if (tip === "4" && player.gold >= 50) {
-        player.gold -= 50;
+    } else if (tip === "4" && player.spiritStones >= 80) {
+        player.spiritStones -= 80;
         player.dodge += 2;
         addLog("闪避率永久+2%");
-    } else if (tip === "5" && player.gold >= 40) {
-        player.gold -= 40;
-        player.maxHp += 20;
-        player.hp += 20;
-        addLog("血量上限永久+20，当前血量+20");
+    } else if (tip === "5" && player.spiritStones >= 60) {
+        player.spiritStones -= 60;
+        player.maxHp += 30;
+        player.hp += 30;
+        addLog("生机上限永久+30，当前生机+30");
     } else {
-        addLog("金币不足或输入错误");
+        addLog("灵石不足或输入错误");
     }
     updateUI();
 }
 
 function openEquipShop() {
-    var shopText = "=== 装备商店 ===\n";
-    shopText += "\n【武器】\n";
+    var shopText = "=== 装备坊市 ===\n";
+    shopText += "\n【攻击法宝】\n";
     equipPool.weapon.forEach(function(item, i) {
         var equipped = player.equipment.weapon && player.equipment.weapon.name === item.name;
-        shopText += (i + 1) + ". " + item.name + " | 攻击+" + item.atk + (item.crit ? " 暴击+" + item.crit + "%" : "") + " | " + item.price + "金币 " + (equipped ? "[已装备]" : "") + "\n";
+        shopText += (i + 1) + ". " + item.name + " | 攻击+" + item.atk + (item.crit ? " 暴击+" + item.crit + "%" : "") + " | " + item.price + "灵石 " + (equipped ? "[已装备]" : "") + "\n";
     });
-    shopText += "\n【防具】\n";
+    shopText += "\n【防御法宝】\n";
     equipPool.armor.forEach(function(item, i) {
         var equipped = player.equipment.armor && player.equipment.armor.name === item.name;
-        shopText += (i + 1) + ". " + item.name + " | 防御+" + item.def + (item.hp ? " 血量+" + item.hp : "") + (item.dodge ? " 闪避+" + item.dodge + "%" : "") + " | " + item.price + "金币 " + (equipped ? "[已装备]" : "") + "\n";
+        shopText += (i + 1) + ". " + item.name + " | 防御+" + item.def + (item.hp ? " 生机+" + item.hp : "") + (item.dodge ? " 闪避+" + item.dodge + "%" : "") + " | " + item.price + "灵石 " + (equipped ? "[已装备]" : "") + "\n";
     });
-    shopText += "\n【饰品】\n";
+    shopText += "\n【灵饰】\n";
     equipPool.accessory.forEach(function(item, i) {
         var equipped = player.equipment.accessory && player.equipment.accessory.name === item.name;
-        shopText += (i + 1) + ". " + item.name + " | " + (item.atk ? "攻击+" + item.atk + " " : "") + (item.def ? "防御+" + item.def + " " : "") + (item.crit ? "暴击+" + item.crit + "% " : "") + (item.dodge ? "闪避+" + item.dodge + "% " : "") + (item.hp ? "血量+" + item.hp + " " : "") + "| " + item.price + "金币 " + (equipped ? "[已装备]" : "") + "\n";
+        shopText += (i + 1) + ". " + item.name + " | " + (item.atk ? "攻击+" + item.atk + " " : "") + (item.def ? "防御+" + item.def + " " : "") + (item.crit ? "暴击+" + item.crit + "% " : "") + (item.dodge ? "闪避+" + item.dodge + "% " : "") + (item.hp ? "生机+" + item.hp + " " : "") + "| " + item.price + "灵石 " + (equipped ? "[已装备]" : "") + "\n";
     });
-    shopText += "\n输入格式: w1=武器1, a1=防具1, ac1=饰品1";
+    shopText += "\n输入格式: w1=攻击法宝1, a1=防御法宝1, ac1=灵饰1";
     shopText += "\n输入 s1/s2/s3 出售装备";
 
     var tip = prompt(shopText);
@@ -1432,15 +2091,15 @@ function openEquipShop() {
 
 function buyEquip(type, idx) {
     var pool = equipPool[type];
-    if (idx < 0 || idx >= pool.length) return addLog("序号错误！");
+    if (idx < 0 || idx >= pool.length) return addLog("选择错误！");
     var item = pool[idx];
-    if (player.gold < item.price) return addLog("金币不足！");
+    if (player.spiritStones < item.price) return addLog("灵石不足！");
     if (player.equipment[type] && player.equipment[type].price) {
         var sellPrice = Math.floor(player.equipment[type].price * 0.5);
-        player.gold += sellPrice;
-        addLog("💰 出售旧装备，获得" + sellPrice + "金币");
+        player.spiritStones += sellPrice;
+        addLog("💰 出售旧法宝，获得" + sellPrice + "灵石");
     }
-    player.gold -= item.price;
+    player.spiritStones -= item.price;
     player.equipment[type] = { name: item.name, atk: item.atk, def: item.def, crit: item.crit, dodge: item.dodge, hp: item.hp, maxHp: item.maxHp, price: item.price };
     player.hp = Math.min(player.hp, getTotalMaxHp());
     addLog("✅ 购买【" + item.name + "】成功！");
@@ -1453,20 +2112,20 @@ function sellEquip(idx) {
     if (!type || !player.equipment[type]) return addLog("没有可出售的装备！");
     var item = player.equipment[type];
     var sellPrice = Math.floor(item.price * 0.5);
-    player.gold += sellPrice;
+    player.spiritStones += sellPrice;
     if (item.maxHp) {
         player.maxHp -= item.maxHp;
         player.hp = Math.min(player.hp, player.maxHp);
     }
     player.equipment[type] = null;
-    addLog("💰 出售【" + item.name + "】，获得" + sellPrice + "金币");
+    addLog("💰 出售【" + item.name + "】，获得" + sellPrice + "灵石");
     updateUI();
 }
 
 function updateZoneButtons() {
     zones.forEach(function(z, i) {
         var btn = document.getElementById('zoneBtn' + i);
-        if (player.lv < z.unlockLevel) {
+        if (player.realm < z.unlockLevel) {
             btn.classList.add('locked');
             btn.classList.remove('active');
         } else {
@@ -1486,16 +2145,16 @@ function openLeaderboard() {
 
     var scores = JSON.parse(localStorage.getItem('rpgLeaderboard') || '[]');
     var currentScore = {
-        name: "玩家Lv" + player.lv,
-        score: player.lv * 100 + player.gold + player.killCount * 10
+        name: "道友·" + player.realmName + "·" + player.stage + "层",
+        score: player.realm * 100 + player.spiritStones + player.killCount * 10
     };
 
-    var html = "<h3>📊 排行榜</h3>";
-    html += "<p style=\"color:#aaa;font-size:12px;\">当前游戏得分: <span style=\"color:#fbbf14;\">" + currentScore.score + "</span></p>";
+    var html = "<h3>📊 天榜</h3>";
+    html += "<p style=\"color:#aaa;font-size:12px;\">当前修真成就: <span style=\"color:#fbbf14;\">" + currentScore.score + "</span></p>";
     html += "<div class=\"leaderboard\" style=\"margin-top:12px;\">";
 
     if (scores.length === 0) {
-        html += "<p style=\"color:#666;text-align:center;\">暂无记录</p>";
+        html += "<p style=\"color:#666;text-align:center;\">暂无天榜记录</p>";
     } else {
         scores.sort(function(a, b) { return b.score - a.score; });
         scores.slice(0, 10).forEach(function(s, i) {
@@ -1508,16 +2167,16 @@ function openLeaderboard() {
     }
     html += "</div>";
     html += "<div style=\"margin-top:12px;\"><button onclick=\"closeModal()\" style=\"flex:1;\">关闭</button></div>";
-    html += "<div style=\"margin-top:8px;\"><button onclick=\"clearScore()\" style=\"background:#dc2626;flex:1;\">清除记录</button></div>";
+    html += "<div style=\"margin-top:8px;\"><button onclick=\"clearScore()\" style=\"background:#dc2626;flex:1;\">重置天榜</button></div>";
 
     content.innerHTML = html;
     modal.style.display = 'flex';
 }
 
 function saveScore() {
-    var name = prompt("恭喜！请输入你的名字来保存成绩：", "玩家");
-    if (!name) name = "匿名玩家";
-    var score = player.lv * 100 + player.gold + player.killCount * 10;
+    var name = prompt("恭喜！请输入你的名字来保存成就：", "道友");
+    if (!name) name = "匿名道友";
+    var score = player.realm * 100 + player.spiritStones + player.killCount * 10;
 
     var scores = JSON.parse(localStorage.getItem('rpgLeaderboard') || '[]');
 
@@ -1536,7 +2195,7 @@ function saveScore() {
 
 function clearScore() {
     localStorage.removeItem('rpgLeaderboard');
-    addLog("🗑️ 排行榜记录已清除！");
+    addLog("🗑️ 天榜记录已清除！");
     closeModal();
     openLeaderboard();
 }
@@ -1544,6 +2203,12 @@ function clearScore() {
 function closeModal() {
     document.getElementById('modal').style.display = 'none';
 }
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal();
+    }
+});
 
 function openSaveLoad() {
     var modal = document.getElementById('modal');
@@ -1553,18 +2218,18 @@ function openSaveLoad() {
     var html = "<h3>💾 存档管理</h3>";
     html += "<div style=\"margin:12px 0;\">";
     html += "<button onclick=\"saveGame(0)\" style=\"background:#22c55e;margin-right:8px;\">存档到 1号位</button>";
-    html += "<button onclick=\"loadGame(0)\" style=\"background:#2563eb;margin-right:8px;\" " + (saves[0] ? '' : 'disabled') + ">读档 1号位</button>";
-    html += saves[0] ? "<span style=\"color:#aaa;font-size:11px;\">" + saves[0].date + " | Lv." + saves[0].data.player.lv + "</span>" : '';
+    html += "<button onclick=\"loadGame(0)\" style=\"background:#2563eb;margin-right:8px;\" " + (saves[0] ? '' : 'disabled') + ">读取 1号位</button>";
+    html += saves[0] ? "<span style=\"color:#aaa;font-size:11px;\">" + saves[0].date + " | Lv." + saves[0].data.player.realm + "</span>" : '';
     html += "</div>";
     html += "<div style=\"margin:12px 0;\">";
     html += "<button onclick=\"saveGame(1)\" style=\"background:#22c55e;margin-right:8px;\">存档到 2号位</button>";
-    html += "<button onclick=\"loadGame(1)\" style=\"background:#2563eb;margin-right:8px;\" " + (saves[1] ? '' : 'disabled') + ">读档 2号位</button>";
-    html += saves[1] ? "<span style=\"color:#aaa;font-size:11px;\">" + saves[1].date + " | Lv." + saves[1].data.player.lv + "</span>" : '';
+    html += "<button onclick=\"loadGame(1)\" style=\"background:#2563eb;margin-right:8px;\" " + (saves[1] ? '' : 'disabled') + ">读取 2号位</button>";
+    html += saves[1] ? "<span style=\"color:#aaa;font-size:11px;\">" + saves[1].date + " | Lv." + saves[1].data.player.realm + "</span>" : '';
     html += "</div>";
     html += "<div style=\"margin:12px 0;\">";
     html += "<button onclick=\"saveGame(2)\" style=\"background:#22c55e;margin-right:8px;\">存档到 3号位</button>";
-    html += "<button onclick=\"loadGame(2)\" style=\"background:#2563eb;margin-right:8px;\" " + (saves[2] ? '' : 'disabled') + ">读档 3号位</button>";
-    html += saves[2] ? "<span style=\"color:#aaa;font-size:11px;\">" + saves[2].date + " | Lv." + saves[2].data.player.lv + "</span>" : '';
+    html += "<button onclick=\"loadGame(2)\" style=\"background:#2563eb;margin-right:8px;\" " + (saves[2] ? '' : 'disabled') + ">读取 3号位</button>";
+    html += saves[2] ? "<span style=\"color:#aaa;font-size:11px;\">" + saves[2].date + " | Lv." + saves[2].data.player.realm + "</span>" : '';
     html += "</div>";
     html += "<div class=\"modal-buttons\"><button onclick=\"closeModal()\" style=\"flex:1;\">关闭</button></div>";
 
@@ -1588,6 +2253,10 @@ function saveGame(slot) {
         petKillCount: petKillCount,
         discoveredMonsters: discoveredMonsters,
         gameSettings: gameSettings,
+        storyChapters: storyChapters,
+        completedTutorials: completedTutorials,
+        currentDungeon: currentDungeon,
+        currentDungeonFloor: currentDungeonFloor,
         date: new Date().toLocaleString()
     };
 
@@ -1595,14 +2264,14 @@ function saveGame(slot) {
     saves[slot] = { date: saveData.date, data: saveData };
     localStorage.setItem('rpgSaves', JSON.stringify(saves));
 
-    addLog("💾 游戏已保存到 " + (slot + 1) + "号位！", 'event');
+    addLog("💾 修仙进度已保存到 " + (slot + 1) + "号位！", 'event');
     closeModal();
     openSaveLoad();
 }
 
 function loadGame(slot) {
     var saves = JSON.parse(localStorage.getItem('rpgSaves') || '[]');
-    if (!saves[slot]) return addLog("存档不存在！");
+    if (!saves[slot]) return addLog("存档为空！");
 
     var data = saves[slot].data;
     Object.assign(player, data.player);
@@ -1619,6 +2288,10 @@ function loadGame(slot) {
     if (data.petKillCount) Object.assign(petKillCount, data.petKillCount);
     if (data.discoveredMonsters) Object.assign(discoveredMonsters, data.discoveredMonsters);
     if (data.gameSettings) Object.assign(gameSettings, data.gameSettings);
+    if (data.storyChapters) { storyChapters.length = 0; storyChapters.push.apply(storyChapters, data.storyChapters); }
+    if (data.completedTutorials) { completedTutorials = data.completedTutorials; }
+    if (data.currentDungeon) currentDungeon = data.currentDungeon;
+    if (data.currentDungeonFloor) currentDungeonFloor = data.currentDungeonFloor;
 
     addLog("📂 从 " + (slot + 1) + "号位读取存档成功！", 'event');
     closeModal();
@@ -1631,13 +2304,13 @@ function openSettings() {
     var modal = document.getElementById('modal');
     var content = document.getElementById('modalContent');
 
-    var html = "<h3>⚙️ 游戏设置</h3>";
+    var html = "<h3>⚙️ 修真设置</h3>";
     html += "<div class=\"settings-row\">";
     html += "<span class=\"settings-label\">🎵 音效</span>";
     html += "<div class=\"toggle-switch " + (gameSettings.soundEnabled ? 'active' : '') + "\" onclick=\"toggleSound()\"></div>";
     html += "</div>";
     html += "<div class=\"settings-row\">";
-    html += "<span class=\"settings-label\">⚡ 战斗速度</span>";
+    html += "<span class=\"settings-label\">⚡ 斗法速度</span>";
     html += "<select class=\"speed-select\" onchange=\"changeBattleSpeed(this.value)\">";
     html += "<option value=\"0.5\" " + (gameSettings.battleSpeed === 0.5 ? 'selected' : '') + ">慢速</option>";
     html += "<option value=\"1\" " + (gameSettings.battleSpeed === 1 ? 'selected' : '') + ">正常</option>";
@@ -1649,7 +2322,100 @@ function openSettings() {
     html += "<span class=\"settings-label\">💾 自动保存</span>";
     html += "<span style=\"color:#4ade80;font-size:12px;\">每30秒自动保存</span>";
     html += "</div>";
+    html += "<div style=\"margin-top:20px;padding-top:15px;border-top:1px solid #444;\">";
+    html += "<button onclick=\"resetGame()\" style=\"background:#dc2626;width:100%;\">🗑️ 重置修仙世界</button>";
+    html += "<div style=\"font-size:11px;color:#888;margin-top:8px;text-align:center;\">将清除所有进度，请谨慎操作！</div>";
+    html += "</div>";
     html += "<div class=\"modal-buttons\"><button onclick=\"closeModal()\" style=\"flex:1;\">关闭</button></div>";
+
+    content.innerHTML = html;
+    modal.style.display = 'flex';
+}
+
+function resetGame() {
+    if (confirm("确定要重置所有修仙进度吗？此操作不可恢复！")) {
+        localStorage.removeItem('rpgSaves');
+        localStorage.removeItem('rpgAutoSave');
+        location.reload();
+    }
+}
+
+function openSpiritRoot() {
+    var modal = document.getElementById('modal');
+    var content = document.getElementById('modalContent');
+
+    var root = spiritRoots.find(function(r) { return r.id === player.spiritRoot; }) || spiritRoots[5];
+    var quality = spiritRootQualities[player.spiritRootQuality] || spiritRootQualities[0];
+    var awakening = spiritRootAwakenings[player.spiritRootAwakening] || spiritRootAwakenings[0];
+    var nextAwakening = spiritRootAwakenings[player.spiritRootAwakening + 1];
+    var bonus = getSpiritRootBonus();
+
+    var rerollCost = 1000 * Math.pow(2, player.rerollCount || 0);
+
+    var html = "<h3>🧬 灵根系统</h3>";
+
+    html += "<div style='background:#333;padding:15px;border-radius:8px;margin-bottom:15px;text-align:center;'>";
+    html += "<div style='font-size:28px;margin-bottom:8px;'>" + root.icon + "</div>";
+    html += "<div style='font-size:18px;color:" + quality.color + ";font-weight:bold;'>" + quality.name + root.name + "</div>";
+    html += "<div style='font-size:12px;color:#888;'>" + root.description + "</div>";
+    html += "<div style='font-size:12px;color:#aaa;margin-top:5px;'>当前觉醒: " + awakening.name + "</div>";
+    html += "</div>";
+
+    html += "<div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px;'>";
+    html += "<div style='background:#222;padding:10px;border-radius:6px;text-align:center;'>";
+    html += "<div style='color:#ef4444;font-size:20px;'>⚔️ " + bonus.atkBonus + "</div>";
+    html += "<div style='color:#888;font-size:11px;'>攻击加成</div>";
+    html += "</div>";
+    html += "<div style='background:#222;padding:10px;border-radius:6px;text-align:center;'>";
+    html += "<div style='color:#3b82f6;font-size:20px;'>🛡️ " + bonus.defBonus + "</div>";
+    html += "<div style='color:#888;font-size:11px;'>防御加成</div>";
+    html += "</div>";
+    html += "<div style='background:#222;padding:10px;border-radius:6px;text-align:center;'>";
+    html += "<div style='color:#22c55e;font-size:20px;'>❤️ " + bonus.hpBonus + "</div>";
+    html += "<div style='color:#888;font-size:11px;'>生机加成</div>";
+    html += "</div>";
+    html += "<div style='background:#222;padding:10px;border-radius:6px;text-align:center;'>";
+    html += "<div style='color:#f59e0b;font-size:20px;'>✨ +" + Math.round(bonus.qiBonus * 100) + "%</div>";
+    html += "<div style='color:#888;font-size:11px;'>修炼效率</div>";
+    html += "</div>";
+    html += "</div>";
+
+    html += "<div style='background:#222;padding:12px;border-radius:6px;margin-bottom:15px;'>";
+    html += "<div style='color:#aaa;font-size:12px;margin-bottom:8px;'>觉醒进度</div>";
+    html += "<div style='display:flex;gap:5px;justify-content:center;'>";
+    for (var i = 0; i < spiritRootAwakenings.length; i++) {
+        var isActive = i <= player.spiritRootAwakening;
+        html += "<div style='width:40px;height:8px;background:" + (isActive ? "#22c55e" : "#444") + ";border-radius:4px;'></div>";
+    }
+    html += "</div>";
+    html += "<div style='font-size:11px;color:#888;margin-top:5px;text-align:center;'>" + awakening.name + "</div>";
+    html += "</div>";
+
+    if (nextAwakening) {
+        html += "<button onclick='awakenSpiritRoot()' style='background:#f59e0b;width:100%;margin-bottom:10px;'>";
+        html += "✨ 觉醒至 " + nextAwakening.name + " (" + nextAwakening.cost + "灵石)";
+        html += "</button>";
+    } else {
+        html += "<div style='background:#22c55e;padding:10px;border-radius:6px;text-align:center;margin-bottom:10px;color:#fff;'>🎉 灵根已觉醒至最高层次！</div>";
+    }
+
+    html += "<button onclick='rerollSpiritRoot()' style='background:#8b5cf6;width:100%;margin-bottom:15px;'>";
+    html += "🎲 重塑灵根 (" + rerollCost + "灵石)";
+    html += "</button>";
+
+    html += "<div style='background:#222;padding:12px;border-radius:6px;'>";
+    html += "<div style='color:#aaa;font-size:12px;margin-bottom:8px;'>灵根类型</div>";
+    for (var i = 0; i < spiritRoots.length; i++) {
+        var r = spiritRoots[i];
+        var isCurrent = r.id === player.spiritRoot;
+        html += "<div style='padding:8px;margin:4px 0;background:" + (isCurrent ? "#333" : "#1a1a1a") + ";border-radius:4px;display:flex;justify-content:space-between;align-items:center;'>";
+        html += "<span>" + r.icon + " " + r.name + "</span>";
+        html += "<span style='font-size:11px;color:#888;'>" + r.description + "</span>";
+        html += "</div>";
+    }
+    html += "</div>";
+
+    html += "<button onclick='closeModal()' style='margin-top:15px;width:100%;'>关闭</button>";
 
     content.innerHTML = html;
     modal.style.display = 'flex';
@@ -1669,11 +2435,11 @@ function openInventory() {
     var modal = document.getElementById('modal');
     var content = document.getElementById('modalContent');
 
-    var html = "<h3>🎒 背包</h3>";
-    html += "<p style=\"color:#aaa;font-size:12px;margin-bottom:10px;\">可使用道具在战斗中获得优势</p>";
+    var html = "<h3>🎒 储物袋</h3>";
+    html += "<p style=\"color:#aaa;font-size:12px;margin-bottom:10px;\">可使用丹药符箓在斗法中获得优势</p>";
 
     if (inventory.length === 0) {
-        html += "<p style=\"color:#666;text-align:center;padding:20px;\">背包空空如也</p>";
+        html += "<p style=\"color:#666;text-align:center;padding:20px;\">储物袋中暂无物品</p>";
     } else {
         html += "<div class=\"inventory-panel\">";
         inventory.forEach(function(item, idx) {
@@ -1718,7 +2484,7 @@ function useItem(itemId) {
             if (invItem.count <= 0) inventory.splice(inventory.findIndex(function(i) { return i.id === itemId; }), 1);
             addLog("✨ 使用【" + itemData.name + "】成功！", 'heal');
         } else {
-            addLog("当前生命值已满，无法使用治疗道具！", 'debuff');
+            addLog("当前生机已满，无法使用丹药！", 'debuff');
         }
     }
     closeModal();
@@ -1738,11 +2504,11 @@ function openMonsterBook() {
     var modal = document.getElementById('modal');
     var content = document.getElementById('modalContent');
 
-    var html = "<h3>📖 怪物图鉴</h3>";
+    var html = "<h3>📖 妖兽图鉴</h3>";
     html += "<div class=\"compendium-tab\">";
-    html += "<button class=\"active\" onclick=\"filterMonsterBook(0, this)\">🌳 森林</button>";
-    html += "<button onclick=\"filterMonsterBook(1, this)\">🕳️ 洞穴</button>";
-    html += "<button onclick=\"filterMonsterBook(2, this)\">👹 BOSS</button>";
+    html += "<button class=\"active\" onclick=\"filterMonsterBook(0, this)\">🌳 青云山脉</button>";
+    html += "<button onclick=\"filterMonsterBook(1, this)\">🕳️ 幽冥洞窟</button>";
+    html += "<button onclick=\"filterMonsterBook(2, this)\">👹 首领</button>";
     html += "</div>";
     html += "<div class=\"monster-book\" id=\"monsterBookContent\"></div>";
     html += "<div class=\"modal-buttons\"><button onclick=\"closeModal()\" style=\"flex:1;\">关闭</button></div>";
@@ -1807,14 +2573,14 @@ function openPetGacha() {
     var modal = document.getElementById('modal');
     modal.style.display = 'flex';
     var content = document.getElementById('modalContent');
-    var html = "<h2>🎰 宠物抽奖</h2>";
+    var html = "<h2>🎰 灵宠召唤</h2>";
     html += "<div style='margin:15px 0;'>";
-    html += "<p>💰 当前金币: " + player.gold + "</p>";
-    html += "<p style='color:#aaa;font-size:12px;'>普通宠物概率: 60% | 稀有: 25% | 史诗: 12% | 传说: 3%</p>";
+    html += "<p>💰 当前灵石: " + player.spiritStones + "</p>";
+    html += "<p style='color:#aaa;font-size:12px;'>凡品灵宠概率: 60% | 灵品: 25% | 仙品: 12% | 神品: 3%</p>";
     html += "</div>";
     html += "<div class='btn-group' style='justify-content:center;'>";
-    html += "<button onclick='petGacha(1)' " + (player.gold < 10 ? "disabled" : "") + ">🎫 单抽 (10金币)</button>";
-    html += "<button onclick='petGacha(10)' " + (player.gold < 100 ? "disabled" : "") + ">🎫 十连 (100金币)</button>";
+    html += "<button onclick='petGacha(1)' " + (player.spiritStones < 10 ? "disabled" : "") + ">🎫 单次召唤 (10灵石)</button>";
+    html += "<button onclick='petGacha(10)' " + (player.spiritStones < 100 ? "disabled" : "") + ">🎫 十连召唤 (100灵石)</button>";
     html += "</div>";
     html += "<div id='gachaResult' style='margin-top:15px;'></div>";
     html += "<button onclick='closeModal()' style='margin-top:15px;'>关闭</button>";
@@ -1823,8 +2589,8 @@ function openPetGacha() {
 
 function petGacha(count) {
     var cost = count * 10;
-    if (player.gold < cost) { addLog("金币不足！"); return; }
-    player.gold -= cost;
+    if (player.spiritStones < cost) { addLog("灵石不足！"); return; }
+    player.spiritStones -= cost;
     var results = [];
     for (var i = 0; i < count; i++) {
         var pet = getRandomPet();
@@ -1838,18 +2604,18 @@ function petGacha(count) {
             for (var j = 0; j < fruitValue; j++) {
                 addItemToInventory("petUpgradeFruit");
             }
-            addLog("🔄 重复宠物【" + pet.name + "】分解为" + fruitValue + "个🍎宠物升级果实！", 'event');
+            addLog("🔄 重复灵宠【" + pet.name + "】炼化为" + fruitValue + "个🍎灵宠丹！", 'event');
         }
         results.push({ pet: pet, isNew: isNew });
     }
     var resultDiv = document.getElementById('gachaResult');
-    var html = "<h3>抽奖结果:</h3><div style='display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:10px;'>";
+    var html = "<h3>召唤结果:</h3><div style='display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:10px;'>";
     results.forEach(function(r) {
         var color = r.pet.rarity === 'legend' ? '#ff6d36' : r.pet.rarity === 'epic' ? '#a855f7' : r.pet.rarity === 'rare' ? '#3b82f6' : '#6b7280';
         html += "<div style='text-align:center;padding:10px;background:#333;border-radius:8px;border:2px solid " + color + ";'>";
         html += "<div style='font-size:32px;'>" + r.pet.sprite + "</div>";
         html += "<div style='color:" + color + ";font-size:12px;'>" + r.pet.name + "</div>";
-        html += "<div style='font-size:10px;color:#aaa;'>" + (r.isNew ? "🆕首次获得!" : "🔄分解") + "</div>";
+        html += "<div style='font-size:10px;color:#aaa;'>" + (r.isNew ? "🆕初次获得!" : "🔄炼化") + "</div>";
         html += "</div>";
     });
     html += "</div>";
@@ -1861,8 +2627,8 @@ function openSkillTree() {
     var modal = document.getElementById('modal');
     modal.style.display = 'flex';
     var content = document.getElementById('modalContent');
-    var html = "<h2>🌳 技能树</h2>";
-    html += "<div style='margin:10px 0;'><span style='color:#facc15;'>⭐ 技能点: " + player.skillPoints + "</span></div>";
+    var html = "<h2>🌳 功法</h2>";
+    html += "<div style='margin:10px 0;'><span style='color:#facc15;'>⭐ 悟道点: " + player.skillPoints + "</span></div>";
     for (var branch in skillTree) {
         var branchData = skillTree[branch];
         html += "<div style='margin:15px 0;padding:10px;background:#444;border-radius:8px;'>";
@@ -1886,10 +2652,10 @@ function openSkillTree() {
 }
 
 function learnSkill(branch, skillName, cost) {
-    if (player.skillPoints < cost) { addLog("技能点不足！"); return; }
+    if (player.skillPoints < cost) { addLog("悟道点不足！"); return; }
     player.skillPoints -= cost;
     player.learnedSkills.push(skillName);
-    addLog("✨ 学会新技能：【" + skillName + "】！", 'buff');
+    addLog("✨ 领悟神通：【" + skillName + "】！", 'buff');
     openSkillTree();
     updateUI();
 }
@@ -1898,11 +2664,11 @@ function openEquipmentEnhance() {
     var modal = document.getElementById('modal');
     modal.style.display = 'flex';
     var content = document.getElementById('modalContent');
-    var html = "<h2>🔨 装备强化</h2>";
+    var html = "<h2>🔨 炼器</h2>";
     var enhanceTypes = [
-        { key: 'weapon', name: '⚔️ 武器', icon: '⚔️' },
-        { key: 'armor', name: '🛡️ 防具', icon: '🛡️' },
-        { key: 'accessory', name: '💍 饰品', icon: '💍' }
+        { key: 'weapon', name: '⚔️ 法宝', icon: '⚔️' },
+        { key: 'armor', name: '🛡️ 护甲', icon: '🛡️' },
+        { key: 'accessory', name: '💍 灵饰', icon: '💍' }
     ];
     enhanceTypes.forEach(function(type) {
         var equip = player.equipment[type.key];
@@ -1913,14 +2679,14 @@ function openEquipmentEnhance() {
         html += "<div style='display:flex;justify-content:space-between;align-items:center;'>";
         html += "<div><span style='font-size:20px;'>" + type.icon + "</span> ";
         html += "<span>" + type.name + "</span></div>";
-        html += "<div style='color:#facc15;'>强化等级: " + level + "</div>";
+        html += "<div style='color:#facc15;'>祭炼境界: " + level + "</div>";
         html += "</div>";
         if (equip) {
-            html += "<div style='font-size:12px;color:#aaa;margin:5px 0;'>" + equip.name + " (强化 +" + level + ")</div>";
-            html += "<div style='font-size:12px;'>下一级: 消耗" + nextCost + "金币 | 成功率" + successRate + "%</div>";
-            html += "<button onclick='enhanceEquip(\"" + type.key + "\")' " + (player.gold < nextCost ? "disabled" : "") + " style='margin-top:8px;background:#f97316;'>强化</button>";
+            html += "<div style='font-size:12px;color:#aaa;margin:5px 0;'>" + equip.name + " (祭炼 +" + level + ")</div>";
+            html += "<div style='font-size:12px;'>下一级: 消耗" + nextCost + "灵石 | 成功率" + successRate + "%</div>";
+            html += "<button onclick='enhanceEquip(\"" + type.key + "\")' " + (player.spiritStones < nextCost ? "disabled" : "") + " style='margin-top:8px;background:#f97316;'>祭炼</button>";
         } else {
-            html += "<div style='font-size:12px;color:#6b7280;'>未装备</div>";
+            html += "<div style='font-size:12px;color:#6b7280;'>未装备法宝</div>";
         }
         html += "</div>";
     });
@@ -1928,21 +2694,68 @@ function openEquipmentEnhance() {
     content.innerHTML = html;
 }
 
+const alchemyRecipes = [
+    { name: "回血丹", cost: 20, effect: function() { player.hp = Math.min(player.hp + 50, player.maxHp); addLog("服用回血丹，恢复50点生机", 'heal'); }, desc: "恢复50点生机" },
+    { name: "补气丹", cost: 30, effect: function() { player.qi += 50; addLog("服用补气丹，获得50修为", 'buff'); }, desc: "获得50修为" },
+    { name: "筑基丹", cost: 100, effect: function() { player.maxHp += 20; player.atk += 5; addLog("服用筑基丹，全属性提升！", 'buff'); }, desc: "永久+20生机 +5攻击" },
+    { name: "洗髓丹", cost: 200, effect: function() { player.crit += 2; player.dodge += 2; addLog("服用洗髓丹，资质提升！", 'buff'); }, desc: "永久+2%暴击 +2%闪避" }
+];
+
+function openAlchemy() {
+    var modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+    var content = document.getElementById('modalContent');
+    var html = "<h2>⚗️ 炼丹</h2>";
+    html += "<p style='color:#aaa;'>炼丹境界: " + player.alchemy.level + "</p>";
+    alchemyRecipes.forEach(function(recipe, index) {
+        html += "<div style='margin:10px 0;padding:12px;background:#444;border-radius:8px;'>";
+        html += "<div style='display:flex;justify-content:space-between;'>";
+        html += "<span>💊 " + recipe.name + "</span>";
+        html += "<span style='color:#facc15;'>" + recipe.cost + "灵石</span>";
+        html += "</div>";
+        html += "<div style='font-size:12px;color:#aaa;margin:5px 0;'>" + recipe.desc + "</div>";
+        html += "<button onclick='craftPill(" + index + ")' " + (player.spiritStones < recipe.cost ? "disabled" : "") + " style='background:#22c55e;'>炼制</button>";
+        html += "</div>";
+    });
+    html += "<button onclick='closeModal()' style='margin-top:15px;'>关闭</button>";
+    content.innerHTML = html;
+}
+
+function craftPill(index) {
+    var recipe = alchemyRecipes[index];
+    if (player.spiritStones < recipe.cost) { addLog("灵石不足！"); return; }
+    player.spiritStones -= recipe.cost;
+    var successRate = 60 + player.alchemy.level * 5;
+    if (Math.random() * 100 < successRate) {
+        recipe.effect();
+        player.alchemy.exp += 10;
+        if (player.alchemy.exp >= player.alchemy.level * 50) {
+            player.alchemy.level++;
+            player.alchemy.exp = 0;
+            addLog("🎉 炼丹术提升到" + player.alchemy.level + "级！", 'levelup');
+        }
+    } else {
+        addLog("💨 炼丹失败，材料报废...", 'debuff');
+    }
+    updateUI();
+    openAlchemy();
+}
+
 function enhanceEquip(type) {
     var level = player.equipmentEnhanceLevels[type.key] || 0;
     var nextCost = (level + 1) * 50;
-    if (player.gold < nextCost) { addLog("金币不足！"); return; }
-    player.gold -= nextCost;
+    if (player.spiritStones < nextCost) { addLog("灵石不足！"); return; }
+    player.spiritStones -= nextCost;
     var successRate = Math.max(20, 100 - level * 10);
     if (Math.random() * 100 < successRate) {
         player.equipmentEnhanceLevels[type] = level + 1;
-        addLog("✨ 强化成功！" + type + "强化等级提升到" + (level + 1) + "！", 'buff');
+        addLog("✨ 祭炼成功！" + type + "祭炼境界提升到" + (level + 1) + "！", 'buff');
     } else {
         if (level > 0 && Math.random() < 0.3) {
             player.equipmentEnhanceLevels[type] = level - 1;
-            addLog("💀 强化失败！" + type + "强化等级降为" + (level - 1) + "...", 'debuff');
+            addLog("💀 祭炼失败！" + type + "祭炼境界降为" + (level - 1) + "...", 'debuff');
         } else {
-            addLog("💨 强化失败，但保住了强化等级！");
+            addLog("💨 祭炼失败，但保住了祭炼境界！");
         }
     }
     openEquipmentEnhance();
@@ -1953,9 +2766,9 @@ var petSummoned = false;
 var petEnergyBoost = 0;
 
 function summonPet() {
-    if (!player.pet) { addLog("你没有伙伴！先去宠物抽奖获得吧！"); openPetGacha(); return; }
-    if (!battleActive) { addLog("请先进入战斗再召唤伙伴！"); return; }
-    if (petSummoned) { addLog("🐾 伙伴已经在战场上！"); return; }
+    if (!player.pet) { addLog("你没有灵宠！先去灵宠召唤获得吧！"); openPetGacha(); return; }
+    if (!battleActive) { addLog("请先进入斗法再召唤灵宠！"); return; }
+    if (petSummoned) { addLog("🐾 灵宠已经在战场上！"); return; }
     petSummoned = true;
     petEnergyBoost = Math.floor(player.pet.atk * 0.5);
     addLog("🐾 召唤【" + player.pet.name + "】参战！获得" + petEnergyBoost + "点攻击力加成！", 'buff');
@@ -1966,9 +2779,9 @@ function openPetManagement() {
     var modal = document.getElementById('modal');
     modal.style.display = 'flex';
     var content = document.getElementById('modalContent');
-    var html = "<h2>🐾 伙伴管理</h2>";
+    var html = "<h2>🐾 灵宠管理</h2>";
     if (petInventory.length === 0) {
-        html += "<p style='color:#aaa;'>你还没有伙伴，去抽奖看看吧！</p>";
+        html += "<p style='color:#aaa;'>你还没有灵宠，去抽奖看看吧！</p>";
     } else {
         html += "<div style='display:flex;gap:10px;flex-wrap:wrap;margin:15px 0;'>";
         petInventory.forEach(function(p) {
@@ -1978,7 +2791,7 @@ function openPetManagement() {
             html += "<div style='font-size:28px;'>" + p.sprite + "</div>";
             html += "<div style='color:#fff;font-size:12px;'>" + p.name + "</div>";
             html += "<div style='color:#aaa;font-size:10px;'>x" + p.count + "</div>";
-            html += "<div style='font-size:10px;color:" + color + ";'>" + (isActive ? '战斗中' : '点击参战') + "</div>";
+            html += "<div style='font-size:10px;color:" + color + ";'>" + (isActive ? '斗法中' : '点击参战') + "</div>";
             html += "</div>";
         });
         html += "</div>";
@@ -1989,7 +2802,7 @@ function openPetManagement() {
         html += "<div style='font-size:40px;'>" + player.pet.sprite + "</div>";
         html += "<div>";
         html += "<div style='font-size:16px;color:#ff6d36;'>" + player.pet.name + " (出战)</div>";
-        html += "<div style='font-size:12px;color:#aaa;'>攻击:" + player.pet.atk + " | 血量:" + player.pet.hp + " | 防御:" + player.pet.def + "</div>";
+        html += "<div style='font-size:12px;color:#aaa;'>攻击:" + player.pet.atk + " | 生机:" + player.pet.hp + " | 防御:" + player.pet.def + "</div>";
         var petData = pets.find(function(p) { return p.id === player.pet.id; });
         if (petData && petData.evolveReq) {
             var currentKills = petKillCount[player.pet.id] || 0;
@@ -2004,7 +2817,7 @@ function openPetManagement() {
         html += "</div>";
         html += "</div>";
     }
-    html += "<div style='margin-top:15px;'><button onclick='openPetGacha()' style='background:#7c3aed;'>🎰 宠物抽奖</button></div>";
+    html += "<div style='margin-top:15px;'><button onclick='openPetGacha()' style='background:#7c3aed;'>🎰 灵宠召唤</button></div>";
     html += "<button onclick='closeModal()' style='margin-top:15px;'>关闭</button>";
     content.innerHTML = html;
 }
@@ -2013,7 +2826,7 @@ function selectPet(petId) {
     var pet = petInventory.find(function(p) { return p.id === petId; });
     if (!pet) return;
     player.pet = { id: pet.id, name: pet.name, sprite: pet.sprite, atk: pet.atk, hp: pet.hp, def: pet.def };
-    addLog("🐾 " + pet.name + " 成为你的伙伴！");
+    addLog("🐾 " + pet.name + " 成为你的灵宠！");
     openPetManagement();
     updateUI();
 }
@@ -2036,6 +2849,10 @@ function startAutoSave() {
             petKillCount: petKillCount,
             discoveredMonsters: discoveredMonsters,
             gameSettings: gameSettings,
+            storyChapters: storyChapters,
+            completedTutorials: completedTutorials,
+            currentDungeon: currentDungeon,
+            currentDungeonFloor: currentDungeonFloor,
             date: new Date().toLocaleString()
         };
         var saves = JSON.parse(localStorage.getItem('rpgSaves') || '[]');
@@ -2049,11 +2866,104 @@ function startAutoSave() {
     }, 30000);
 }
 
+var meditationTimer = null;
+var meditationInterval = null;
+
+function toggleMeditation() {
+    if (player.meditation.active) {
+        stopMeditation();
+    } else {
+        startMeditation();
+    }
+}
+
+function startMeditation() {
+    if (battleActive) {
+        addLog("⚠️ 斗法中无法打坐！");
+        return;
+    }
+    if (player.breakthrough.inProgress) {
+        addLog("⚠️ 突破中无法打坐！");
+        return;
+    }
+
+    player.meditation.active = true;
+    player.meditation.startTime = Date.now();
+    player.meditation.totalGain = 0;
+
+    var btn = document.getElementById('meditationBtn');
+    btn.textContent = "🧘 停止打坐";
+    btn.style.background = "#ef4444";
+
+    addLog("<span class='buff'>🧘 开始打坐修炼，每5秒获得修为...</span>");
+
+    meditationInterval = setInterval(function() {
+        if (!player.meditation.active) return;
+
+        var realmMultiplier = realms[player.realm].multiplier;
+        var stageBonus = player.stage * 0.1;
+        var baseGain = 5;
+        var totalGain = Math.floor(baseGain * realmMultiplier * (1 + stageBonus));
+
+        var spiritPoolLevel = player.residence.spiritPool;
+        if (spiritPoolLevel > 0) {
+            var building = residenceBuildings.find(function(b) { return b.key === 'spiritPool'; });
+            var poolBonus = building.meditationBonus[spiritPoolLevel - 1] || 0;
+            totalGain = Math.floor(totalGain * (1 + poolBonus));
+        }
+
+        if (player.sect.id) {
+            var sect = sects.find(function(s) { return s.id === player.sect.id; });
+            var rankData = sectRanks.find(function(r) { return r.name === player.sect.rank; });
+            if (sect && sect.benefits.expBonus) totalGain = Math.floor(totalGain * (1 + sect.benefits.expBonus * rankData.benefit));
+        }
+
+        if (player.master.id) totalGain = Math.floor(totalGain * (1 + masterBenefits.expBonus));
+        if (player.disciples.length > 0) totalGain = Math.floor(totalGain * (1 + discipleBenefits.expBonus * Math.min(player.disciples.length, 3)));
+        if (player.partner.id) totalGain = Math.floor(totalGain * (1 + partnerBenefits.expBonus));
+
+        var rootBonus = getSpiritRootBonus();
+        totalGain = Math.floor(totalGain * (1 + rootBonus.qiBonus));
+
+        player.qi += totalGain;
+        player.meditation.totalGain += totalGain;
+
+        addLog("🧘 打坐修炼，获得 " + totalGain + " 修为 (总计: " + player.meditation.totalGain + ")");
+
+        checkLevelUp();
+        updateUI();
+    }, 5000);
+
+    updateUI();
+}
+
+function stopMeditation() {
+    player.meditation.active = false;
+
+    if (meditationInterval) {
+        clearInterval(meditationInterval);
+        meditationInterval = null;
+    }
+
+    var btn = document.getElementById('meditationBtn');
+    btn.textContent = "🧘 打坐修炼";
+    btn.style.background = "#3b82f6";
+
+    if (player.meditation.totalGain > 0) {
+        addLog("<span class='buff'>🧘 结束打坐，本次共获得 " + player.meditation.totalGain + " 修为</span>");
+    }
+
+    player.meditation.startTime = null;
+    player.meditation.totalGain = 0;
+
+    updateUI();
+}
+
 function updateUI() {
-    document.getElementById('gold').textContent = player.gold;
-    document.getElementById('exp').textContent = player.exp;
-    document.getElementById('needExp').textContent = player.needExp;
-    document.getElementById('lv').textContent = player.lv;
+    document.getElementById('spiritStones').textContent = player.spiritStones;
+    document.getElementById('qi').textContent = player.qi;
+    document.getElementById('needQi').textContent = player.needQi;
+    document.getElementById('realm').textContent = realms[player.realm].name + '·' + player.stage + '层';
     document.getElementById('killCount').textContent = player.killCount;
     document.getElementById('eventCount').textContent = player.eventCount;
     document.getElementById('hp').textContent = Math.max(0, player.hp) + '/' + getTotalMaxHp();
@@ -2109,7 +3019,24 @@ function updateUI() {
     if (mHpPercent < 25) mHpBar.classList.add('danger');
     else if (mHpPercent < 50) mHpBar.classList.add('mid');
 
-    document.getElementById('monsterBuffs').innerHTML = (nowMonster.buffs || []).map(function(b) { return "<span class=\"" + b.type + "-item\">" + b.name + ":" + b.turns + "回合</span>"; }).join('');
+    document.getElementById('monsterBuffs').innerHTML = (nowMonster.buffs || []).map(function(b) { return "<span class=\"" + b.type + "-item\">" + b.name + ":" + b.turns + "轮</span>"; }).join('');
+
+    var breakthroughBtn = document.getElementById('breakthroughBtn');
+    if (player.breakthrough.inProgress && player.breakthrough.type === 'bottleneck') {
+        breakthroughBtn.style.display = 'inline-block';
+    } else {
+        breakthroughBtn.style.display = 'none';
+    }
+
+    var sectDisplay = document.getElementById('sectDisplay');
+    if (player.sect.id) {
+        sectDisplay.style.display = 'inline';
+        var sectData = sects.find(function(s) { return s.id === player.sect.id; });
+        document.getElementById('sectName').textContent = sectData ? sectData.name : player.sect.name;
+        document.getElementById('sectRank').textContent = player.sect.rank;
+    } else {
+        sectDisplay.style.display = 'none';
+    }
 
     updateBuffs();
     updateEquipSlots();
@@ -2119,8 +3046,960 @@ function updateUI() {
     updateAchievements();
 }
 
+function openSect() {
+    var modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+    var content = document.getElementById('modalContent');
+
+    if (!player.sect.id) {
+        var html = "<h2>🏛️ 宗门大殿</h2>";
+        html += "<p style='color:#aaa;'>选择一个宗门加入，获得宗门庇护和资源</p>";
+        html += "<div style='margin-top:15px;'>";
+
+        sects.forEach(function(sect) {
+            var canJoin = player.realm >= sect.minRealm;
+            var benefits = [];
+            if (sect.benefits.expBonus) benefits.push("修为+" + (sect.benefits.expBonus * 100) + "%");
+            if (sect.benefits.atkBonus) benefits.push("攻击+" + (sect.benefits.atkBonus * 100) + "%");
+            if (sect.benefits.hpBonus) benefits.push("生机+" + (sect.benefits.hpBonus * 100) + "%");
+            if (sect.benefits.defBonus) benefits.push("防御+" + (sect.benefits.defBonus * 100) + "%");
+            if (sect.benefits.critBonus) benefits.push("暴击+" + sect.benefits.critBonus + "%");
+            if (sect.benefits.alchemyBonus) benefits.push("炼丹+" + (sect.benefits.alchemyBonus * 100) + "%");
+
+            html += "<div style='margin:10px 0;padding:12px;background:#444;border-radius:8px;opacity:" + (canJoin ? "1" : "0.5") + ";'>";
+            html += "<div style='display:flex;justify-content:space-between;align-items:center;'>";
+            html += "<span style='color:" + sect.color + ";font-size:16px;'>🏛️ " + sect.name + "</span>";
+            html += "<span style='font-size:11px;color:#aaa;'>[" + sect.type + "]</span>";
+            html += "</div>";
+            html += "<div style='font-size:12px;color:#aaa;margin:5px 0;'>" + sect.description + "</div>";
+            html += "<div style='font-size:11px;color:#4ade80;'>福利: " + benefits.join(" | ") + "</div>";
+            html += "<div style='font-size:11px;color:#fbbf24;'>绝学: " + sect.skills.join("、") + "</div>";
+            if (canJoin) {
+                html += "<button onclick='joinSect(\"" + sect.id + "\")' style='margin-top:8px;background:" + sect.color + ";'>加入宗门</button>";
+            } else {
+                html += "<div style='margin-top:8px;font-size:11px;color:#666;'>需要" + realms[sect.minRealm].name + "方可加入</div>";
+            }
+            html += "</div>";
+        });
+
+        html += "</div>";
+        html += "<button onclick='closeModal()' style='margin-top:15px;'>关闭</button>";
+        content.innerHTML = html;
+    } else {
+        showSectMain(content);
+    }
+}
+
+function joinSect(sectId) {
+    var sect = sects.find(function(s) { return s.id === sectId; });
+    if (!sect) return;
+
+    player.sect.id = sect.id;
+    player.sect.name = sect.name;
+    player.sect.contribution = 0;
+    player.sect.rank = "外门弟子";
+    player.sect.dailyQuestsCompleted = 0;
+    player.sect.lastDailyReset = Date.now();
+
+    addLog("<span class='levelup'>🏛️ 成功加入" + sect.name + "！成为外门弟子！</span>");
+    closeModal();
+    updateUI();
+}
+
+function showSectMain(content) {
+    var sect = sects.find(function(s) { return s.id === player.sect.id; });
+    var rankData = sectRanks.find(function(r) { return r.name === player.sect.rank; });
+
+    var html = "<h2>🏛️ " + player.sect.name + "</h2>";
+    html += "<div style='background:#444;padding:12px;border-radius:8px;margin:10px 0;'>";
+    html += "<div style='display:flex;justify-content:space-between;'>";
+    html += "<span>身份: <span style='color:#fbbf24;'>" + player.sect.rank + "</span></span>";
+    html += "<span>贡献: <span style='color:#facc15;'>" + player.sect.contribution + "</span></span>";
+    html += "</div>";
+
+    var benefits = [];
+    if (sect.benefits.expBonus) benefits.push("修为+" + Math.floor(sect.benefits.expBonus * rankData.benefit * 100) + "%");
+    if (sect.benefits.atkBonus) benefits.push("攻击+" + Math.floor(sect.benefits.atkBonus * rankData.benefit * 100) + "%");
+    if (sect.benefits.hpBonus) benefits.push("生机+" + Math.floor(sect.benefits.hpBonus * rankData.benefit * 100) + "%");
+    if (sect.benefits.defBonus) benefits.push("防御+" + Math.floor(sect.benefits.defBonus * rankData.benefit * 100) + "%");
+    if (sect.benefits.critBonus) benefits.push("暴击+" + Math.floor(sect.benefits.critBonus * rankData.benefit) + "%");
+    if (sect.benefits.alchemyBonus) benefits.push("炼丹+" + Math.floor(sect.benefits.alchemyBonus * rankData.benefit * 100) + "%");
+    html += "<div style='font-size:11px;color:#4ade80;margin-top:5px;'>宗门福利: " + benefits.join(" | ") + "</div>";
+    html += "</div>";
+
+    checkDailyReset();
+    html += "<div style='margin:15px 0;'>";
+    html += "<h3 style='color:#ff6d36;margin-bottom:10px;'>📜 宗门任务 (" + player.sect.dailyQuestsCompleted + "/" + rankData.dailyQuests + ")</h3>";
+
+    if (player.sect.dailyQuestsCompleted < rankData.dailyQuests) {
+        sectQuests.forEach(function(quest, idx) {
+            html += "<div style='margin:8px 0;padding:10px;background:#333;border-radius:6px;'>";
+            html += "<div style='display:flex;justify-content:space-between;'>";
+            html += "<span>" + quest.name + "</span>";
+            html += "<span style='font-size:11px;color:#facc15;'>+" + quest.reward.contribution + "贡献</span>";
+            html += "</div>";
+            html += "<div style='font-size:11px;color:#aaa;'" + quest.desc + "</div>";
+            html += "<div style='font-size:10px;color:#888;'>奖励: " + quest.reward.exp + "修为 | " + quest.reward.gold + "灵石</div>";
+            html += "<button onclick='completeSectQuest(" + idx + ")' style='margin-top:5px;padding:4px 8px;font-size:11px;'>完成任务</button>";
+            html += "</div>";
+        });
+    } else {
+        html += "<p style='color:#666;text-align:center;'>今日任务已完成</p>";
+    }
+
+    html += "</div>";
+
+    var nextRank = sectRanks[sectRanks.findIndex(function(r) { return r.name === player.sect.rank; }) + 1];
+    if (nextRank) {
+        html += "<div style='background:#333;padding:10px;border-radius:6px;margin:10px 0;'>";
+        html += "<div style='font-size:12px;color:#aaa;'>下一级: " + nextRank.name + " (需要" + nextRank.contribution + "贡献)</div>";
+        html += "<div style='width:100%;height:6px;background:#222;border-radius:3px;margin-top:5px;'>";
+        html += "<div style='width:" + Math.min(100, player.sect.contribution / nextRank.contribution * 100) + "%;height:100%;background:linear-gradient(90deg,#f59e0b,#ff6d36);border-radius:3px;'></div>";
+        html += "</div></div>";
+    }
+
+    html += "<div style='display:flex;gap:10px;margin-top:15px;'>";
+    html += "<button onclick='leaveSect()' style='background:#dc2626;flex:1;'>退出宗门</button>";
+    html += "<button onclick='closeModal()' style='flex:1;'>关闭</button>";
+    html += "</div>";
+
+    content.innerHTML = html;
+}
+
+function checkDailyReset() {
+    var now = Date.now();
+    var lastReset = player.sect.lastDailyReset;
+    if (now - lastReset > 24 * 60 * 60 * 1000) {
+        player.sect.dailyQuestsCompleted = 0;
+        player.sect.lastDailyReset = now;
+    }
+}
+
+function completeSectQuest(questIndex) {
+    var quest = sectQuests[questIndex];
+    if (!quest) return;
+
+    var rankData = sectRanks.find(function(r) { return r.name === player.sect.rank; });
+    if (player.sect.dailyQuestsCompleted >= rankData.dailyQuests) {
+        return addLog("今日任务已完成！");
+    }
+
+    player.sect.dailyQuestsCompleted++;
+    player.sect.contribution += quest.reward.contribution;
+    player.qi += quest.reward.exp;
+    player.spiritStones += quest.reward.gold;
+
+    addLog("<span class='quest'>📜 完成宗门任务【" + quest.name + "】！贡献+" + quest.reward.contribution + "</span>");
+
+    checkSectRankUp();
+    checkLevelUp();
+    updateUI();
+    openSect();
+}
+
+function checkSectRankUp() {
+    for (var i = sectRanks.length - 1; i >= 0; i--) {
+        if (player.sect.contribution >= sectRanks[i].contribution && player.sect.rank !== sectRanks[i].name) {
+            if (sectRanks.findIndex(function(r) { return r.name === player.sect.rank; }) < i) {
+                player.sect.rank = sectRanks[i].name;
+                addLog("<span class='levelup'>🎉 宗门地位提升！成为" + player.sect.rank + "！</span>");
+                break;
+            }
+        }
+    }
+}
+
+function leaveSect() {
+    if (!confirm("确定要退出" + player.sect.name + "吗？贡献值将清零！")) return;
+
+    addLog("<span class='debuff'>🏛️ 退出" + player.sect.name + "，贡献值清零</span>");
+    player.sect = { id: null, name: null, contribution: 0, rank: "外门弟子", dailyQuestsCompleted: 0, lastDailyReset: 0 };
+    closeModal();
+    updateUI();
+}
+
+function openResidence() {
+    var modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+    var content = document.getElementById('modalContent');
+
+    var html = "<h2>🏠 我的洞府</h2>";
+    html += "<p style='color:#aaa;font-size:12px;'>建设洞府设施，获得持续收益</p>";
+
+    residenceBuildings.forEach(function(building) {
+        var currentLevel = player.residence[building.key];
+        var maxLevel = building.costs.length;
+        var isMax = currentLevel >= maxLevel;
+
+        html += "<div style='margin:12px 0;padding:12px;background:#444;border-radius:8px;'>";
+        html += "<div style='display:flex;align-items:center;gap:10px;'>";
+        html += "<span style='font-size:24px;'>" + building.icon + "</span>";
+        html += "<div style='flex:1;'>";
+        html += "<div style='display:flex;justify-content:space-between;'>";
+        html += "<span>" + building.name + " <span style='color:#fbbf24;'>Lv." + currentLevel + "</span></span>";
+        if (isMax) {
+            html += "<span style='color:#4ade80;font-size:11px;'>已满级</span>";
+        } else {
+            html += "<span style='color:#facc15;font-size:11px;'>升级: " + building.costs[currentLevel] + "灵石</span>";
+        }
+        html += "</div>";
+        html += "<div style='font-size:11px;color:#aaa;margin:3px 0;'>" + building.description + "</div>";
+
+        if (building.key === 'spiritField') {
+            var production = building.production[currentLevel - 1] || 0;
+            html += "<div style='font-size:10px;color:#4ade80;'>每小时产出: " + production + "灵石</div>";
+        } else if (building.key === 'alchemyRoom') {
+            var bonus = building.bonus[currentLevel - 1] || 0;
+            html += "<div style='font-size:10px;color:#4ade80;'>炼丹成功率: +" + bonus + "%</div>";
+        } else if (building.key === 'forgeRoom') {
+            var bonus = building.bonus[currentLevel - 1] || 0;
+            html += "<div style='font-size:10px;color:#4ade80;'>炼器成功率: +" + bonus + "%</div>";
+        } else if (building.key === 'spiritPool') {
+            var regen = building.regen[currentLevel - 1] || 0;
+            var medBonus = building.meditationBonus[currentLevel - 1] || 0;
+            html += "<div style='font-size:10px;color:#4ade80;'>每小时恢复: " + regen + "生机 | 打坐收益: +" + Math.floor(medBonus * 100) + "%</div>";
+        }
+
+        html += "</div>";
+
+        if (!isMax) {
+            html += "<button onclick='upgradeResidence(\"" + building.key + "\")' style='padding:6px 12px;font-size:11px;background:#22c55e;'" + (player.spiritStones < building.costs[currentLevel] ? " disabled" : "") + ">升级</button>";
+        }
+
+        html += "</div></div>";
+    });
+
+    var offlineGain = calculateOfflineGain();
+    if (offlineGain > 0) {
+        html += "<div style='background:#333;padding:10px;border-radius:6px;margin:10px 0;text-align:center;'>";
+        html += "<div style='color:#4ade80;font-size:14px;'>💰 离线收益: " + offlineGain + "灵石</div>";
+        html += "<div style='font-size:11px;color:#aaa;'>灵田自动产出</div>";
+        html += "<button onclick='collectOfflineGain()' style='margin-top:8px;background:#f59e0b;'>领取收益</button>";
+        html += "</div>";
+    }
+
+    html += "<button onclick='closeModal()' style='margin-top:15px;'>关闭</button>";
+    content.innerHTML = html;
+}
+
+function upgradeResidence(buildingKey) {
+    var building = residenceBuildings.find(function(b) { return b.key === buildingKey; });
+    if (!building) return;
+
+    var currentLevel = player.residence[buildingKey];
+    var maxLevel = building.costs.length;
+
+    if (currentLevel >= maxLevel) return addLog("已达最高等级！");
+
+    var cost = building.costs[currentLevel];
+    if (player.spiritStones < cost) return addLog("灵石不足！");
+
+    player.spiritStones -= cost;
+    player.residence[buildingKey]++;
+
+    addLog("<span class='buff'>🏠 " + building.name + "升级到Lv." + player.residence[buildingKey] + "！</span>");
+    updateUI();
+    openResidence();
+}
+
+function calculateOfflineGain() {
+    var lastCollect = player.residence.lastCollect;
+    var now = Date.now();
+    var hoursPassed = (now - lastCollect) / (1000 * 60 * 60);
+    var spiritFieldLevel = player.residence.spiritField;
+    if (spiritFieldLevel <= 0) return 0;
+
+    var building = residenceBuildings.find(function(b) { return b.key === 'spiritField'; });
+    var production = building.production[spiritFieldLevel - 1] || 0;
+    return Math.floor(production * hoursPassed);
+}
+
+function collectOfflineGain() {
+    var gain = calculateOfflineGain();
+    if (gain <= 0) return;
+
+    player.spiritStones += gain;
+    player.residence.lastCollect = Date.now();
+
+    addLog("<span class='gold'>💰 领取洞府收益: " + gain + "灵石</span>");
+    updateUI();
+    openResidence();
+}
+
+function openSocial() {
+    document.getElementById('modalTitle').textContent = "🤝 仙缘";
+    var content = document.getElementById('modalContent');
+    var html = "";
+
+    html += "<div style='display:flex;gap:10px;margin-bottom:15px;'>";
+    html += "<button onclick='showMasterTab()' style='flex:1;background:#f59e0b;'>👨‍🏫 师徒</button>";
+    html += "<button onclick='showPartnerTab()' style='flex:1;background:#ec4899;'>💕 道侣</button>";
+    html += "<button onclick='showAIPlayersTab()' style='flex:1;background:#3b82f6;'>👥 仙友</button>";
+    html += "</div>";
+
+    html += "<div id='socialContent'>";
+    html += showMasterTabContent();
+    html += "</div>";
+
+    content.innerHTML = html;
+}
+
+function showMasterTab() {
+    document.getElementById('socialContent').innerHTML = showMasterTabContent();
+}
+
+function showMasterTabContent() {
+    var html = "";
+
+    if (player.master.id) {
+        var master = aiPlayers.find(function(p) { return p.id === player.master.id; });
+        html += "<div style='background:#333;padding:15px;border-radius:8px;margin-bottom:15px;'>";
+        html += "<h4 style='color:#f59e0b;margin-bottom:10px;'>👨‍🏫 我的师父</h4>";
+        html += "<div style='display:flex;justify-content:space-between;align-items:center;'>";
+        html += "<div><b style='font-size:16px;'>" + master.name + "</b>";
+        html += "<div style='font-size:12px;color:#aaa;'>" + master.realmName + "·" + master.stage + "层</div></div>";
+        html += "<div style='text-align:right;'><div style='color:#fbbf24;'>亲密度: " + player.master.intimacy + "/100</div>";
+        html += "<div style='font-size:11px;color:#4ade80;'>修为+20% 攻击+10% 防御+10%</div></div>";
+        html += "</div>";
+        html += "<div style='margin-top:10px;display:flex;gap:8px;'>";
+        html += "<button onclick='interactWithMaster()' style='flex:1;background:#22c55e;'>🎁 请安送礼</button>";
+        html += "<button onclick='learnFromMaster()' style='flex:1;background:#3b82f6;'>📚 请教功法</button>";
+        html += "</div>";
+        html += "</div>";
+    } else {
+        html += "<div style='background:#333;padding:15px;border-radius:8px;margin-bottom:15px;'>";
+        html += "<h4 style='color:#f59e0b;margin-bottom:10px;'>👨‍🏫 寻找师父</h4>";
+        html += "<div style='font-size:12px;color:#aaa;margin-bottom:10px;'>拜师后可获得修为、攻击、防御加成</div>";
+
+        var availableMasters = aiPlayers.filter(function(p) {
+            return p.realm > player.realm || (p.realm === player.realm && p.stage > player.stage);
+        }).slice(0, 5);
+
+        availableMasters.forEach(function(master) {
+            html += "<div style='background:#444;padding:10px;border-radius:6px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;'>";
+            html += "<div><b>" + master.name + "</b><div style='font-size:11px;color:#aaa;'>" + master.realmName + "·" + master.stage + "层</div></div>";
+            html += "<button onclick='requestMaster(\"" + master.id + "\")' style='background:#f59e0b;'>拜师</button>";
+            html += "</div>";
+        });
+        html += "</div>";
+    }
+
+    if (player.disciples.length > 0) {
+        html += "<div style='background:#333;padding:15px;border-radius:8px;'>";
+        html += "<h4 style='color:#22c55e;margin-bottom:10px;'>👨‍🎓 我的弟子 (" + player.disciples.length + "/3)</h4>";
+        player.disciples.forEach(function(d) {
+            var disciple = aiPlayers.find(function(p) { return p.id === d.id; });
+            html += "<div style='background:#444;padding:10px;border-radius:6px;margin:8px 0;'>";
+            html += "<div style='display:flex;justify-content:space-between;'>";
+            html += "<div><b>" + disciple.name + "</b><div style='font-size:11px;color:#aaa;'>" + disciple.realmName + "·" + disciple.stage + "层</div></div>";
+            html += "<div style='color:#fbbf24;'>亲密度: " + d.intimacy + "/100</div>";
+            html += "</div>";
+            html += "<div style='margin-top:8px;display:flex;gap:8px;'>";
+            html += "<button onclick='teachDisciple(\"" + d.id + "\")' style='flex:1;font-size:11px;'>📖 传授功法</button>";
+            html += "<button onclick='giveGiftToDisciple(\"" + d.id + "\")' style='flex:1;font-size:11px;'>🎁 赠予资源</button>";
+            html += "</div>";
+            html += "</div>";
+        });
+        html += "<div style='font-size:11px;color:#4ade80;text-align:center;margin-top:10px;'>弟子收益: 修为+10% 灵石+15%</div>";
+        html += "</div>";
+    } else {
+        html += "<div style='background:#333;padding:15px;border-radius:8px;text-align:center;color:#888;'>暂无弟子</div>";
+    }
+
+    return html;
+}
+
+function showPartnerTab() {
+    document.getElementById('socialContent').innerHTML = showPartnerTabContent();
+}
+
+function showPartnerTabContent() {
+    var html = "";
+
+    if (player.partner.id) {
+        var partner = aiPlayers.find(function(p) { return p.id === player.partner.id; });
+        html += "<div style='background:#333;padding:15px;border-radius:8px;margin-bottom:15px;'>";
+        html += "<h4 style='color:#ec4899;margin-bottom:10px;'>💕 " + (player.partner.married ? "💍 道侣" : "❤️ 红颜") + "</h4>";
+        html += "<div style='text-align:center;padding:20px;'>";
+        html += "<div style='font-size:48px;margin-bottom:10px;'>" + (player.partner.married ? "💑" : "💕") + "</div>";
+        html += "<div style='font-size:18px;font-weight:bold;'>" + partner.name + "</div>";
+        html += "<div style='font-size:12px;color:#aaa;'>" + partner.realmName + "·" + partner.stage + "层</div>";
+        html += "<div style='margin-top:10px;color:#fbbf24;'>亲密度: " + player.partner.intimacy + "/100</div>";
+        html += "</div>";
+
+        if (!player.partner.married && player.partner.intimacy >= 100) {
+            html += "<button onclick='proposeMarriage()' style='width:100%;background:#ec4899;margin-bottom:10px;'>💍 结为道侣</button>";
+        }
+
+        html += "<div style='display:flex;gap:8px;'>";
+        html += "<button onclick='dateWithPartner()' style='flex:1;background:#f472b6;'>🌹 约会</button>";
+        html += "<button onclick='dualCultivation()' style='flex:1;background:#a855f7;'>☯️ 双修</button>";
+        html += "</div>";
+
+        html += "<div style='margin-top:15px;padding:10px;background:#444;border-radius:6px;'>";
+        html += "<div style='font-size:12px;color:#4ade80;text-align:center;'>";
+        html += "修为+30% 生机+15% 攻击+15% 打坐+50%";
+        html += "</div></div>";
+        html += "</div>";
+    } else {
+        html += "<div style='background:#333;padding:15px;border-radius:8px;margin-bottom:15px;'>";
+        html += "<h4 style='color:#ec4899;margin-bottom:10px;'>💕 寻觅仙缘</h4>";
+        html += "<div style='font-size:12px;color:#aaa;margin-bottom:10px;'>找到心仪的道侣，共同修仙</div>";
+
+        var availablePartners = aiPlayers.filter(function(p) {
+            return !p.isPartner && p.id !== player.master.id && !player.disciples.find(function(d) { return d.id === p.id; });
+        }).slice(0, 5);
+
+        availablePartners.forEach(function(partner) {
+            html += "<div style='background:#444;padding:10px;border-radius:6px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;'>";
+            html += "<div><b>" + partner.name + "</b><div style='font-size:11px;color:#aaa;'>" + partner.realmName + "·" + partner.stage + "层</div></div>";
+            html += "<button onclick='pursuePartner(\"" + partner.id + "\")' style='background:#ec4899;'>追求</button>";
+            html += "</div>";
+        });
+        html += "</div>";
+    }
+
+    return html;
+}
+
+function showAIPlayersTab() {
+    document.getElementById('socialContent').innerHTML = showAIPlayersTabContent();
+}
+
+function showAIPlayersTabContent() {
+    var html = "";
+    html += "<div style='background:#333;padding:15px;border-radius:8px;'>";
+    html += "<h4 style='color:#3b82f6;margin-bottom:10px;'>👥 修仙界同道</h4>";
+
+    aiPlayers.sort(function(a, b) { return b.power - a.power; }).forEach(function(p, index) {
+        var isMaster = player.master.id === p.id;
+        var isDisciple = player.disciples.find(function(d) { return d.id === p.id; });
+        var isPartner = player.partner.id === p.id;
+        var relation = isMaster ? "👨‍🏫师父" : isDisciple ? "👨‍🎓弟子" : isPartner ? "💕道侣" : "";
+
+        html += "<div style='background:#444;padding:10px;border-radius:6px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;'>";
+        html += "<div><b>" + p.name + "</b> " + (relation ? "<span style='color:#fbbf24;font-size:11px;'>" + relation + "</span>" : "") + "<div style='font-size:11px;color:#aaa;'>" + p.realmName + "·" + p.stage + "层 | 战力:" + p.power + "</div></div>";
+        html += "<div style='text-align:right;'><div style='font-size:12px;color:#888;'>第" + (index + 1) + "名</div></div>";
+        html += "</div>";
+    });
+    html += "</div>";
+    return html;
+}
+
+function requestMaster(aiId) {
+    var master = aiPlayers.find(function(p) { return p.id === aiId; });
+    if (!master) return;
+
+    player.master = { id: aiId, name: master.name, realm: master.realm, stage: master.stage, intimacy: 20 };
+    master.isMaster = true;
+
+    addLog("<span class='buff'>🎉 成功拜" + master.name + "为师！获得师徒加成</span>");
+    updateUI();
+    showMasterTab();
+}
+
+function interactWithMaster() {
+    if (player.spiritStones < 100) {
+        addLog("请安需要100灵石作为礼物！");
+        return;
+    }
+    player.spiritStones -= 100;
+    player.master.intimacy = Math.min(100, player.master.intimacy + 5);
+
+    var master = aiPlayers.find(function(p) { return p.id === player.master.id; });
+    addLog("<span class='buff'>🎁 向" + master.name + "请安，亲密度+5</span>");
+    showMasterTab();
+}
+
+function learnFromMaster() {
+    if (player.master.intimacy < 30) {
+        addLog("亲密度不足30，师父不愿传授！");
+        return;
+    }
+    var expGain = Math.floor(50 * realms[player.realm].multiplier);
+    player.qi += expGain;
+    player.master.intimacy = Math.max(0, player.master.intimacy - 2);
+
+    var master = aiPlayers.find(function(p) { return p.id === player.master.id; });
+    addLog("<span class='buff'>📚 向" + master.name + "请教，获得" + expGain + "修为</span>");
+    checkLevelUp();
+    updateUI();
+    showMasterTab();
+}
+
+function teachDisciple(discipleId) {
+    var d = player.disciples.find(function(d) { return d.id === discipleId; });
+    if (!d) return;
+
+    var expGain = Math.floor(30 * realms[player.realm].multiplier);
+    player.qi += expGain;
+    d.intimacy = Math.min(100, d.intimacy + 3);
+
+    var disciple = aiPlayers.find(function(p) { return p.id === discipleId; });
+    addLog("<span class='buff'>📖 传授" + disciple.name + "功法，获得" + expGain + "修为，亲密度+3</span>");
+    updateUI();
+    showMasterTab();
+}
+
+function giveGiftToDisciple(discipleId) {
+    if (player.spiritStones < 50) {
+        addLog("赠礼需要50灵石！");
+        return;
+    }
+    player.spiritStones -= 50;
+    var d = player.disciples.find(function(d) { return d.id === discipleId; });
+    d.intimacy = Math.min(100, d.intimacy + 5);
+
+    var disciple = aiPlayers.find(function(p) { return p.id === discipleId; });
+    addLog("<span class='buff'>🎁 赠予" + disciple.name + "资源，亲密度+5</span>");
+    showMasterTab();
+}
+
+function pursuePartner(aiId) {
+    var partner = aiPlayers.find(function(p) { return p.id === aiId; });
+    if (!partner) return;
+
+    if (Math.random() < 0.5) {
+        player.partner = { id: aiId, name: partner.name, realm: partner.realm, stage: partner.stage, intimacy: 10, married: false };
+        partner.isPartner = true;
+        addLog("<span class='buff'>💕 成功与" + partner.name + "结缘！开始培养感情吧</span>");
+        showPartnerTab();
+    } else {
+        addLog("<span class='debuff'>💔 " + partner.name + "对你尚无好感，继续努力</span>");
+    }
+}
+
+function dateWithPartner() {
+    if (player.spiritStones < 200) {
+        addLog("约会需要200灵石！");
+        return;
+    }
+    player.spiritStones -= 200;
+    player.partner.intimacy = Math.min(100, player.partner.intimacy + 10);
+
+    var partner = aiPlayers.find(function(p) { return p.id === player.partner.id; });
+    addLog("<span class='buff'>🌹 与" + partner.name + "约会，亲密度+10</span>");
+    showPartnerTab();
+}
+
+function dualCultivation() {
+    if (player.partner.intimacy < 50) {
+        addLog("亲密度不足50，无法进行双修！");
+        return;
+    }
+    var expGain = Math.floor(100 * realms[player.realm].multiplier * (1 + player.partner.intimacy / 100));
+    player.qi += expGain;
+
+    var partner = aiPlayers.find(function(p) { return p.id === player.partner.id; });
+    addLog("<span class='buff'>☯️ 与" + partner.name + "双修，获得" + expGain + "修为</span>");
+    checkLevelUp();
+    updateUI();
+}
+
+function proposeMarriage() {
+    player.partner.married = true;
+    var partner = aiPlayers.find(function(p) { return p.id === player.partner.id; });
+    addLog("<span class='levelup'>💍 恭喜！你与" + partner.name + "正式结为道侣！双修收益大幅提升</span>");
+    showPartnerTab();
+}
+
+function openStory() {
+    var modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+    var titleEl = document.getElementById('modalTitle');
+    var content = document.getElementById('modalContent');
+    titleEl.textContent = "📜 修仙剧情";
+    var html = "";
+
+    storyChapters.forEach(function(chapter, index) {
+        if (!chapter.unlocked) {
+            html += "<div style='background:#333;padding:12px;border-radius:6px;margin:8px 0;opacity:0.5;'>";
+            html += "<span style='color:#888;'>🔒 " + chapter.title + " (需境界: " + realms[chapter.realmRequired].name + ")</span></div>";
+        } else {
+            var status = chapter.completed ? "✅" : "🔔";
+            var btnStyle = chapter.completed ? "background:#22c55e;" : "background:#f59e0b;";
+            html += "<div style='background:#333;padding:12px;border-radius:6px;margin:8px 0;'>";
+            html += "<div style='display:flex;justify-content:space-between;align-items:center;'>";
+            html += "<span>" + status + " " + chapter.title + "</span>";
+            html += "<button onclick='playStory(" + index + ")' style='" + btnStyle + "'>" + (chapter.completed ? "回顾" : "开始") + "</button>";
+            html += "</div></div>";
+        }
+    });
+
+    html += "<button onclick='closeModal()' style='margin-top:15px;'>关闭</button>";
+    content.innerHTML = html;
+}
+
+function playStory(chapterIndex) {
+    var chapter = storyChapters[chapterIndex];
+    if (!chapter || !chapter.unlocked) return;
+
+    currentStoryIndex = chapterIndex;
+    storyDialogueIndex = 0;
+    showStoryDialogue();
+}
+
+function showStoryDialogue() {
+    var chapter = storyChapters[currentStoryIndex];
+    if (!chapter || storyDialogueIndex >= chapter.dialogues.length) {
+        if (!chapter.completed) {
+            chapter.completed = true;
+            var nextChapter = storyChapters[currentStoryIndex + 1];
+            if (nextChapter) {
+                nextChapter.unlocked = true;
+                addLog("📜 剧情解锁: " + nextChapter.title);
+            }
+            checkStoryUnlocks();
+        }
+        closeModal();
+        addLog("📜 剧情结束: " + chapter.title);
+        return;
+    }
+
+    var dialogue = chapter.dialogues[storyDialogueIndex];
+    var modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+    var titleEl = document.getElementById('modalTitle');
+    var content = document.getElementById('modalContent');
+
+    titleEl.textContent = "📜 " + chapter.title;
+    var html = "<div style='background:#444;padding:20px;border-radius:8px;margin-bottom:15px;'>";
+    html += "<div style='font-size:16px;margin-bottom:10px;color:#f59e0b;'>" + dialogue.speaker + "</div>";
+    html += "<div style='font-size:14px;line-height:1.6;'>" + dialogue.text + "</div>";
+    html += "</div>";
+    html += "<button onclick='storyDialogueIndex++;showStoryDialogue();' style='width:100%;background:#22c55e;'>下一句</button>";
+
+    content.innerHTML = html;
+}
+
+function checkStoryUnlocks() {
+    storyChapters.forEach(function(chapter, index) {
+        if (!chapter.unlocked) {
+            if (player.realm >= chapter.realmRequired) {
+                if (chapter.stageRequired && player.stage < chapter.stageRequired) {
+                    return;
+                }
+                chapter.unlocked = true;
+                addLog("<span class='event'>📜 剧情解锁: " + chapter.title + "</span>");
+            }
+        }
+    });
+}
+
+function openDungeon() {
+    var modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+    var titleEl = document.getElementById('modalTitle');
+    var content = document.getElementById('modalContent');
+    titleEl.textContent = "🏰 副本挑战";
+
+    var html = "";
+    if (currentDungeon) {
+        html += showDungeonBattle();
+    } else {
+        html += showDungeonList();
+    }
+
+    html += "<button onclick='closeModal()' style='margin-top:15px;'>关闭</button>";
+    content.innerHTML = html;
+}
+
+function showDungeonList() {
+    var html = "";
+    dungeons.forEach(function(dungeon, index) {
+        var locked = player.realm < dungeon.realmRequired;
+        var diffColor = dungeon.difficulty === "easy" ? "#22c55e" : dungeon.difficulty === "medium" ? "#f59e0b" : dungeon.difficulty === "hard" ? "#ef4444" : "#dc2626";
+
+        html += "<div style='background:#333;padding:12px;border-radius:6px;margin:8px 0;" + (locked ? "opacity:0.5;" : "") + "'>";
+        html += "<div style='display:flex;justify-content:space-between;align-items:center;'>";
+        html += "<div><b>" + dungeon.name + "</b>";
+        html += "<div style='font-size:11px;color:#888;'>" + dungeon.description + "</div>";
+        html += "<div style='font-size:11px;color:#aaa;'>难度: <span style='color:" + diffColor + ";'>" + dungeon.difficulty + "</span> | 层数: " + dungeon.floors + " | 推荐: " + dungeon.realmRequired + "境界" + dungeon.recommendedStage + "层</div></div>";
+
+        if (!locked) {
+            html += "<button onclick='enterDungeon(" + index + ")' style='background:#7c3aed;'>进入</button>";
+        } else {
+            html += "<span style='color:#666;'>🔒</span>";
+        }
+        html += "</div></div>";
+    });
+    return html;
+}
+
+function enterDungeon(dungeonIndex) {
+    var dungeon = dungeons[dungeonIndex];
+    if (!dungeon) return;
+
+    currentDungeon = dungeon;
+    currentDungeonFloor = 1;
+    addLog("<span class='event'>🏰 进入副本: " + dungeon.name + " 第1层</span>");
+    spawnDungeonMonster();
+    openDungeon();
+}
+
+function spawnDungeonMonster() {
+    var dungeon = currentDungeon;
+    if (!dungeon) return;
+
+    var monsterTemplate = dungeon.monsters[Math.floor(Math.random() * dungeon.monsters.length)];
+    var floorBonus = currentDungeonFloor * 0.1;
+
+    dungeonMonster = {
+        name: monsterTemplate.name,
+        sprite: "👹",
+        hp: Math.floor(monsterTemplate.hp * (1 + floorBonus)),
+        maxHp: Math.floor(monsterTemplate.hp * (1 + floorBonus)),
+        atk: Math.floor(monsterTemplate.atk * (1 + floorBonus)),
+        def: Math.floor(monsterTemplate.def * (1 + floorBonus)),
+        exp: Math.floor(monsterTemplate.exp * (1 + floorBonus)),
+        gold: Math.floor(monsterTemplate.gold * (1 + floorBonus)),
+        buffs: []
+    };
+
+    addLog("🏰 第" + currentDungeonFloor + "层出现: " + dungeonMonster.name + " (HP:" + dungeonMonster.hp + ")");
+    openDungeon();
+}
+
+function showDungeonBattle() {
+    var dungeon = currentDungeon;
+    var html = "";
+
+    html += "<div style='background:#222;padding:15px;border-radius:8px;text-align:center;margin-bottom:15px;'>";
+    html += "<div style='color:#f59e0b;margin-bottom:10px;'>🏰 " + dungeon.name + " - 第" + currentDungeonFloor + "/" + dungeon.floors + "层</div>";
+
+    if (dungeonMonster && dungeonMonster.hp > 0) {
+        html += "<div style='font-size:40px;margin:10px 0;'>👹</div>";
+        html += "<div><b>" + dungeonMonster.name + "</b></div>";
+        html += "<div style='margin:10px 0;'>";
+        html += "<div style='width:100%;height:10px;background:#333;border-radius:5px;overflow:hidden;'>";
+        html += "<div style='width:" + (dungeonMonster.hp / dungeonMonster.maxHp * 100) + "%;height:100%;background:linear-gradient(90deg,#ef4444,#f87171);'></div>";
+        html += "</div>";
+        html += "<div style='font-size:12px;margin-top:5px;'>生机: " + dungeonMonster.hp + "/" + dungeonMonster.maxHp + "</div>";
+        html += "</div>";
+        html += "<div style='display:flex;gap:8px;justify-content:center;margin-top:15px;'>";
+        html += "<button onclick='dungeonAttack()' style='background:#ef4444;flex:1;'>攻击</button>";
+        html += "<button onclick='dungeonFlee()' style='background:#6b7280;flex:1;'>退出</button>";
+        html += "</div>";
+    } else {
+        html += "<div style='color:#22c55e;padding:20px;'>🎉 击败当前层怪物！</div>";
+        if (currentDungeonFloor >= dungeon.floors) {
+            html += "<div style='color:#fbbf24;padding:15px;'>🏆 通关副本！</div>";
+            html += "<div style='font-size:12px;color:#aaa;'>";
+            html += "奖励: " + dungeon.rewards.gold + "灵石, " + dungeon.rewards.exp + "修为";
+            html += "</div>";
+            player.spiritStones += dungeon.rewards.gold;
+            player.qi += dungeon.rewards.exp;
+            if (dungeon.rewards.item) {
+                addItemToInventory(dungeon.rewards.item);
+            }
+            html += "<button onclick='exitDungeon()' style='background:#22c55e;margin-top:10px;'>领取奖励离开</button>";
+        } else {
+            html += "<button onclick='currentDungeonFloor++;spawnDungeonMonster();openDungeon();' style='background:#22c55e;margin-top:10px;'>下一层</button>";
+        }
+    }
+
+    html += "</div>";
+    return html;
+}
+
+function dungeonAttack() {
+    if (!dungeonMonster) return;
+
+    var playerAtk = getTotalAtk();
+    var damage = Math.max(1, playerAtk - dungeonMonster.def);
+    dungeonMonster.hp -= damage;
+
+    addLog("⚔️ 你攻击" + dungeonMonster.name + "，造成 " + damage + " 伤害");
+
+    if (dungeonMonster.hp <= 0) {
+        addLog("🏰 击败" + dungeonMonster.name + "！");
+        openDungeon();
+    } else {
+        var monsterDmg = Math.max(1, dungeonMonster.atk - getTotalDef());
+        player.hp -= monsterDmg;
+        addLog("👹 " + dungeonMonster.name + "反击，造成 " + monsterDmg + " 伤害");
+
+        if (player.hp <= 0) {
+            player.hp = 0;
+            addLog("<span class='debuff'>💀 你在副本中重伤，自动退出！</span>");
+            exitDungeon();
+        } else {
+            openDungeon();
+        }
+    }
+    updateUI();
+}
+
+function dungeonFlee() {
+    exitDungeon();
+}
+
+function exitDungeon() {
+    currentDungeon = null;
+    currentDungeonFloor = 0;
+    dungeonMonster = null;
+    closeModal();
+    updateUI();
+}
+
+function showTutorial(tutorialId) {
+    if (completedTutorials.indexOf(tutorialId) >= 0) return;
+
+    var tutorial = tutorials.find(function(t) { return t.id === tutorialId; });
+    if (!tutorial) return;
+
+    completedTutorials.push(tutorialId);
+
+    var modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+    var titleEl = document.getElementById('modalTitle');
+    var content = document.getElementById('modalContent');
+
+    titleEl.textContent = "💡 " + tutorial.title;
+    var html = "<div style='background:#444;padding:20px;border-radius:8px;text-align:center;'>";
+    html += "<div style='font-size:14px;line-height:1.8;'>" + tutorial.content + "</div>";
+    html += "<button onclick='closeModal();checkTutorialTriggers();' style='margin-top:20px;background:#22c55e;width:100%;'>知道了</button>";
+    html += "</div>";
+
+    content.innerHTML = html;
+}
+
+function checkTutorialTriggers() {
+    if (completedTutorials.indexOf("t1") < 0) {
+        showTutorial("t1");
+        return;
+    }
+
+    if (player.killCount >= 1 && completedTutorials.indexOf("t2") < 0) {
+        showTutorial("t2");
+        return;
+    }
+
+    if (player.stage >= 3 && completedTutorials.indexOf("t3") < 0) {
+        showTutorial("t3");
+        return;
+    }
+
+    if (player.equipment.weapon && completedTutorials.indexOf("t4") < 0) {
+        showTutorial("t4");
+        return;
+    }
+
+    if (player.sect.id && completedTutorials.indexOf("t5") < 0) {
+        showTutorial("t5");
+        return;
+    }
+
+    if (player.residence.spiritField > 0 && completedTutorials.indexOf("t6") < 0) {
+        showTutorial("t6");
+        return;
+    }
+
+    if (player.realm >= 2 && completedTutorials.indexOf("t7") < 0) {
+        showTutorial("t7");
+        return;
+    }
+}
+
+function openTutorial() {
+    var modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+    var titleEl = document.getElementById('modalTitle');
+    var content = document.getElementById('modalContent');
+
+    titleEl.textContent = "💡 新手引导";
+
+    var html = "";
+    tutorials.forEach(function(t, index) {
+        var done = completedTutorials.indexOf(t.id) >= 0;
+        html += "<div style='background:#333;padding:12px;border-radius:6px;margin:8px 0;'>";
+        html += "<div style='display:flex;justify-content:space-between;align-items:center;'>";
+        html += "<span>" + (done ? "✅" : "🔔") + " " + (index + 1) + ". " + t.title + "</span>";
+        html += "<button onclick='showTutorial(\"" + t.id + "\")' style='background:#3b82f6;'>查看</button>";
+        html += "</div></div>";
+    });
+
+    html += "<button onclick='checkTutorialTriggers();closeModal();' style='margin-top:15px;background:#22c55e;'>重新引导</button>";
+    html += "<button onclick='closeModal()' style='margin-top:10px;'>关闭</button>";
+    content.innerHTML = html;
+}
+
+function openDungeonsFromMain() {
+    openDungeon();
+}
+
+function initGameSystems() {
+    checkStoryUnlocks();
+    checkFeatureUnlocks();
+    setInterval(checkFeatureUnlocks, 5000);
+}
+
+const featureUnlocks = [
+    { id: "story", name: "剧情", icon: "📜", realm: 0, stage: 0, btnId: "storyBtn", desc: "体验修仙世界的精彩故事" },
+    { id: "spiritRoot", name: "灵根", icon: "🧬", realm: 0, stage: 2, btnId: "spiritRootBtn", desc: "灵根影响修炼效率和属性加成" },
+    { id: "alchemy", name: "炼丹", icon: "⚗️", realm: 0, stage: 3, btnId: "alchemyBtn", desc: "炼丹可炼制各种灵丹妙药" },
+    { id: "equipment", name: "炼器", icon: "🔨", realm: 0, stage: 5, btnId: "equipmentBtn", desc: "炼器可强化法宝装备" },
+    { id: "pet", name: "灵兽", icon: "🐲", realm: 1, stage: 0, btnId: "petBtn", desc: "灵兽可助战并提升战力" },
+    { id: "petGacha", name: "灵宠召唤", icon: "🎰", realm: 1, stage: 0, btnId: "petGachaBtn", desc: "召唤强力灵兽伙伴" },
+    { id: "sect", name: "宗门", icon: "🏛️", realm: 1, stage: 3, btnId: "sectBtn", desc: "加入宗门获得属性加成" },
+    { id: "dungeon", name: "副本", icon: "🏰", realm: 1, stage: 5, btnId: "dungeonBtn", desc: "挑战副本获取稀有奖励" },
+    { id: "residence", name: "洞府", icon: "🏠", realm: 2, stage: 0, btnId: "residenceBtn", desc: "洞府可产出灵石和资源" },
+    { id: "social", name: "仙缘", icon: "🤝", realm: 2, stage: 3, btnId: "socialBtn", desc: "师徒道侣仙缘系统" }
+];
+
+const unlockedFeatures = {};
+
+function checkFeatureUnlocks() {
+    featureUnlocks.forEach(function(feature) {
+        var isUnlocked = player.realm > feature.realm || (player.realm === feature.realm && player.stage >= feature.stage);
+        if (isUnlocked && !unlockedFeatures[feature.id]) {
+            unlockedFeatures[feature.id] = true;
+            addLog("<span class='event'>🎉 解锁新功能: " + feature.icon + feature.name + " - " + feature.desc + "</span>");
+        }
+        var btn = document.getElementById(feature.btnId);
+        if (btn) {
+            btn.style.display = isUnlocked ? 'inline-block' : 'none';
+        }
+    });
+    updateUI();
+}
+
+initGameSystems();
 startAutoSave();
+
+var saves = JSON.parse(localStorage.getItem('rpgSaves') || '[]');
+var autoSave = saves.find(function(s) { return s && s.isAuto; });
+if (autoSave) {
+    var data = autoSave.data;
+    Object.assign(player, data.player);
+    nowMonster = data.nowMonster || { buffs: [] };
+    currentEvent = data.currentEvent;
+    consecutiveKills = data.consecutiveKills;
+    zoneKills = data.zoneKills;
+    totalGoldEarned = data.totalGoldEarned;
+    questCompleted = data.questCompleted;
+    if (data.quests) { quests.length = 0; quests.push.apply(quests, data.quests); }
+    if (data.achievements) { achievements.length = 0; achievements.push.apply(achievements, data.achievements); }
+    if (data.inventory) { inventory.length = 0; inventory.push.apply(inventory, data.inventory); }
+    if (data.petInventory) { petInventory.length = 0; petInventory.push.apply(petInventory, data.petInventory); }
+    if (data.petKillCount) Object.assign(petKillCount, data.petKillCount);
+    if (data.discoveredMonsters) Object.assign(discoveredMonsters, data.discoveredMonsters);
+    if (data.gameSettings) Object.assign(gameSettings, data.gameSettings);
+    if (data.storyChapters) { storyChapters.length = 0; storyChapters.push.apply(storyChapters, data.storyChapters); }
+    if (data.completedTutorials) { completedTutorials = data.completedTutorials; }
+    if (data.currentDungeon) currentDungeon = data.currentDungeon;
+    if (data.currentDungeonFloor) currentDungeonFloor = data.currentDungeonFloor;
+    var offlineGain = calculateOfflineGain();
+    if (offlineGain > 0) {
+        player.spiritStones += offlineGain;
+        player.residence.lastCollect = Date.now();
+        setTimeout(function() {
+            addLog("<span class='gold'>💰 离线收益: " + offlineGain + "灵石</span>");
+        }, 1000);
+    }
+    addLog("📂 自动读取上次的存档！", 'event');
+}
+
 updateUI();
 </script>
 </body>
-</html>
